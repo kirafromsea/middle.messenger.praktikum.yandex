@@ -1,0 +1,26 @@
+@use 'variables' as *;
+@use 'auth';
+@use 'controls';
+@use 'chat';
+@use 'error';
+@use 'pages';
+@use 'profile';
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: Verdana, sans-serif;
+}
+
+div, input, button {
+  box-sizing: border-box;
+}

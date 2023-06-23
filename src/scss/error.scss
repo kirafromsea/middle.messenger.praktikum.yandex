@@ -1,0 +1,12 @@
+@use 'variables' as *;
+
+.error-page {
+  h1 {
+    margin-bottom: 12px;
+  }
+
+  &_action {
+    width: 250px;
+    margin-top: 36px;
+  }
+}
