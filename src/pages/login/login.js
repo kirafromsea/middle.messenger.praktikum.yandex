@@ -5,7 +5,8 @@ import Button from '../../components/Button/button.js';
 const loginButton = Button({
   title: 'Log In',
   onClick: "window.location.href='/chat'",
-  type: 'primary'
+  uiType: 'primary',
+  type: 'submit'
 });
 
 const LoginPage = () => {

@@ -6,7 +6,8 @@ import Button from '../../components/Button/button.js';
 const indexPageButton = Button({
   title: 'Go to index page',
   onClick: "window.location.href='/'",
-  type: 'primary'
+  uiType: 'primary',
+  type: 'button'
 });
 
 const ErrorPage = ({errorNumber}) => {

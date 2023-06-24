@@ -5,19 +5,22 @@ import {Button} from '../../components';
 const sendProfileButton = Button({
   title: 'Save profile',
   onClick: '',
-  type: 'primary'
+  uiType: 'primary',
+  type: 'submit'
 });
 
 const sendPasswordButton = Button({
   title: 'Save new password',
   onClick: '',
-  type: 'primary'
+  uiType: 'primary',
+  type: 'button'
 });
 
 const returnButton = Button({
   title: 'X',
   onClick: "window.location.href='/chat'",
-  type: 'third'
+  uiType: 'third',
+  type: 'button'
 });
 
 const ProfilePage = ({...profile}) => {

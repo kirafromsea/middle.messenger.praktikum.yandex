@@ -5,7 +5,8 @@ import Button from '../../components/Button/button.js';
 const registrationButton = Button({
   title: 'Sign Up',
   onClick: "window.location.href='/chat'",
-  type: 'primary'
+  uiType: 'primary',
+  type: 'submit'
 });
 
 const RegistrationPage = () => {

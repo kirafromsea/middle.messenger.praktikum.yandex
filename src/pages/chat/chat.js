@@ -5,19 +5,22 @@ import {Button, ChatItem} from '../../components';
 const buttonSearch = Button({
   title: 'Search',
   onClick: '',
-  type: 'third'
+  uiType: 'third',
+  type: 'button'
 });
 
 const profileButton = Button({
   title: 'Profile',
   onClick: 'window.location.href="/profile"',
-  type: 'third'
+  uiType: 'third',
+  type: 'button'
 });
 
 const buttonSend = Button({
   title: 'Send',
   onClick: '',
-  type: 'third'
+  uiType: 'third',
+  type: 'button'
 });
 
 const ChatPage = ({activeChat, chats}) => {

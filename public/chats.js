@@ -2,6 +2,7 @@ const profile = {
   first_name: 'Rigel',
   second_name: 'Kastor',
   login: 'betelgeuse',
+  display_name: 'Rigel Betelgeuse Kastor II',
   email: 'rigel_kastor@space',
   password: 'tree_star',
   phone: '+07892221415',

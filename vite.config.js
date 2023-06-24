@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite';
 const NODE_ENV = process.env.NODE_ENV || 'dev';
+const PORT = process.env.PORT || 3000;
 
 export default defineConfig({
   base: NODE_ENV === 'production' ? './' : './',
   server: {
-    port: 3000,
+    port: PORT,
     strictPort: true,
   },
   build: {

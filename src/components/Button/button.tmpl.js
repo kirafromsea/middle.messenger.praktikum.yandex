@@ -1,3 +1,3 @@
 export const buttonTmpl = `
-  <Button class="button button--{{type}}" onClick={{{onClick}}}>{{title}}</Button>
+  <Button class="button button--{{uiType}}" type="{{type}}" onClick={{{onClick}}}>{{title}}</Button>
 `;
