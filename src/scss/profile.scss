@@ -1,0 +1,50 @@
+@use 'variables' as *;
+
+.profile-page {
+  .page_content {
+    position: relative;
+  }
+
+  .avatar {
+    width: 160px;
+    height: 160px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    margin-bottom: 24px;
+  }
+
+  .return-chat {
+    position: absolute;
+    top: 15px;
+    right: 0;
+    width: 40px;
+  }
+
+  .user-info, .user-password {
+    font-size: 12px;
+    div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+
+      strong {
+        flex-grow: 2;
+        margin-right: 8px;
+        width: 100%;
+      }
+    }
+
+    button {
+      margin-top: 16px;
+    }
+  }
+
+  .user-password {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid $primary-background;
+  }
+}
