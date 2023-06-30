@@ -1,4 +1,4 @@
-export const loginTmpl = `
+const loginTmpl = `
   <div class="auth-page">
     <form class="auth-form" action="javascript:void(0);">
         <h2 class="auth-form__title">Log In</h2>
@@ -9,3 +9,5 @@ export const loginTmpl = `
     </form>
   </div>
 `;
+
+export default loginTmpl;

@@ -1,4 +1,4 @@
-export const profileTmpl = `
+const profileTmpl = `
   <div class="page profile-page">
     <div class="page_content">
         <div class="return-chat">{{{returnButton}}}</div>
@@ -20,3 +20,5 @@ export const profileTmpl = `
     </div>
   </div>
 `;
+
+export default profileTmpl;

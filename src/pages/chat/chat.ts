@@ -1,46 +1,49 @@
 import Handlebars from 'handlebars';
-import {chatTmpl} from './chat.tmpl.js';
-import {Button, ChatItem} from '../../components';
+import { ChatsType, UserProfileType } from '../../types/chats.ts';
+import chatTmpl from './chat.tmpl.ts';
+import { Button, ChatItem } from '../../components/index.ts';
 
 interface ChatPageProps {
- activeChat: any;
+ activeChat: string | null;
+ chats: ChatsType;
+ profile: UserProfileType;
 }
 
 const buttonSearch = Button({
-  title: 'Search',
-  onClick: '',
-  uiType: 'third',
-  type: 'button'
+    title: 'Search',
+    onClick: '',
+    uiType: 'third',
+    type: 'button',
 });
 
 const profileButton = Button({
-  title: 'Profile',
-  onClick: 'window.location.href="/profile"',
-  uiType: 'third',
-  type: 'button'
+    title: 'Profile',
+    onClick: 'window.location.href="/profile"',
+    uiType: 'third',
+    type: 'button',
 });
 
 const buttonSend = Button({
-  title: 'Send',
-  onClick: '',
-  uiType: 'third',
-  type: 'button'
+    title: 'Send',
+    onClick: '',
+    uiType: 'third',
+    type: 'button',
 });
 
-const ChatPage = ({activeChat, chats}: ChatPageProps) => {
-  const chatList = chats.map(chat => ChatItem({
-      title: chat.display_name || chat.username,
-      onClick: `window.location.href='/chat'`,
-      avatar: chat.avatar
-  })).join('');
+const ChatPage = ({ activeChat, chats }: ChatPageProps) => {
+    const chatList = chats.map((chat) => ChatItem({
+        displayName: chat.displayName || chat.login,
+        onClick: `window.location.href='/chat/${chat.login}'`,
+        avatar: chat.avatar,
+    })).join('');
 
-  return Handlebars.compile(chatTmpl)({
-    buttonSearch,
-    profileButton,
-    activeChat,
-    chatList,
-    buttonSend
-  });
-}
+    return Handlebars.compile(chatTmpl)({
+        buttonSearch,
+        profileButton,
+        activeChat,
+        chatList,
+        buttonSend,
+    });
+};
 
 export default ChatPage;

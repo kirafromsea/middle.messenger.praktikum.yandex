@@ -1,14 +1,11 @@
 import Handlebars from 'handlebars';
-import {chatItemTmpl} from './chatItem.tmpl.js';
+import { ChatItemType } from '../../types/chats.ts';
+import chatItemTmpl from './chatItem.tmpl.ts';
 
-interface ChatItemProps {
-  avatar?: string;
-  title: string;
-  onClick?: () => void;
+interface ChatItemProps extends Omit<ChatItemType, 'messages' | 'login'> {
+  onClick?: string;
 }
 
-const ChatItem = ({avatar, title, onClick}: ChatItemProps) => {
-  return Handlebars.compile(chatItemTmpl)({avatar, title, onClick});
-}
+const ChatItem = ({ avatar, displayName, onClick }: ChatItemProps) => Handlebars.compile(chatItemTmpl)({ avatar, displayName, onClick });
 
 export default ChatItem;

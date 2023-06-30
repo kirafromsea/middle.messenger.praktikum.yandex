@@ -1,8 +1,8 @@
-import LoginPage from './pages/login/login.js';
-import RegistrationPage from './pages/registration/registration.js';
+import LoginPage from './pages/login/login.ts';
+import RegistrationPage from './pages/registration/registration.ts';
 import ChatPage from './pages/chat/chat.js';
-import ErrorPage from './pages/error/error.js';
-import ProfilePage from './pages/profile/profile.js';
+import ErrorPage from './pages/error/error.ts';
+import ProfilePage from './pages/profile/profile.ts';
 import chatInfo from '../public/chats.js';
 
 const chatPeople = chatInfo.chats.map(item => item.username);

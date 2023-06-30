@@ -1,4 +1,4 @@
-export const chatTmpl = `
+const chatTmpl = `
   <div class="chat-page">
     <div class="chat-left">
         <div class="chat-header">
@@ -18,3 +18,5 @@ export const chatTmpl = `
     </div>
   </div>
 `;
+
+export default chatTmpl;

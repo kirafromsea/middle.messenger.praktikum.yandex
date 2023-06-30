@@ -1,2 +1,2 @@
-export {default as Button} from './Button/button.js';
-export {default as ChatItem} from './Chatitem/chatItem.js';
+export { default as Button } from './Button/button.ts';
+export { default as ChatItem } from './Chatitem/chatItem.ts';
