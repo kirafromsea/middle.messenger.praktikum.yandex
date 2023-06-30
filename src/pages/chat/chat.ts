@@ -2,6 +2,10 @@ import Handlebars from 'handlebars';
 import {chatTmpl} from './chat.tmpl.js';
 import {Button, ChatItem} from '../../components';
 
+interface ChatPageProps {
+ activeChat: any;
+}
+
 const buttonSearch = Button({
   title: 'Search',
   onClick: '',
@@ -23,7 +27,7 @@ const buttonSend = Button({
   type: 'button'
 });
 
-const ChatPage = ({activeChat, chats}) => {
+const ChatPage = ({activeChat, chats}: ChatPageProps) => {
   const chatList = chats.map(chat => ChatItem({
       title: chat.display_name || chat.username,
       onClick: `window.location.href='/chat'`,
