@@ -8,15 +8,16 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npm run prebuild && vite build",
+    "build": "vite build",
     "preview": "vite preview --port 8080",
     "start": "vite build; vite preview --port 3000",
     "start:server": "node ./server/server.js ",
-    "prebuild": "tsc --noEmit",
+    "typescript": "tsc --noEmit",
     "lint": "eslint . --ext .ts --fix",
     "stylelint": "stylelint"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "eslint": "^8.43.0",

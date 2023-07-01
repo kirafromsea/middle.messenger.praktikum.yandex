@@ -1,6 +1,6 @@
 import LoginPage from './pages/login/login.ts';
 import RegistrationPage from './pages/registration/registration.ts';
-import ChatPage from './pages/chat/chat.js';
+import ChatPage from './pages/chat/chat.ts';
 import ErrorPage from './pages/error/error.ts';
 import ProfilePage from './pages/profile/profile.ts';
 import chatInfo from '../public/chats.js';
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pathWay = path.split('/').filter(item => item !== '');
     switch (pathWay[0]) {
       case 'login':
-        return LoginPage();
+        return new LoginPage();
       case 'signup':
         return RegistrationPage();
       case 'chat':
