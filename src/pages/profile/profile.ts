@@ -1,12 +1,12 @@
 import Handlebars from 'handlebars';
 import profileTmpl from './profile.tmpl.ts';
-import { Button } from '../../components/index.ts';
+// import { Button } from '../../components/index.ts';
 import { UserProfileType } from '../../types/chats.ts';
 
 interface ProfileProps {
   profile: UserProfileType;
 }
-
+/*
 const sendProfileButton = Button({
     title: 'Save profile',
     onClick: '',
@@ -27,12 +27,12 @@ const returnButton = Button({
     uiType: 'third',
     type: 'button',
 });
-
+*/
 const ProfilePage = ({ profile }: ProfileProps) => Handlebars.compile(profileTmpl)({
     profile,
-    returnButton,
-    sendProfileButton,
-    sendPasswordButton,
+    // returnButton,
+    // sendProfileButton,
+    // sendPasswordButton,
 });
 
 export default ProfilePage;

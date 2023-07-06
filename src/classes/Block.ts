@@ -1,14 +1,6 @@
 import Handlebars from 'handlebars';
 import { v4 } from 'uuid';
-import {Values} from '../types/classes';
 import EventBus from './EventBus.ts';
-
-interface MetaBlockType<T = any>{
-    tagName,
-    props: T;
-}
-
-type EventsType = Values<typeof Block.EVENTS>;
 
 class Block<T extends object = {}> {
     static EVENTS = {
@@ -18,47 +10,113 @@ class Block<T extends object = {}> {
         FLOW_RENDER: 'flow:render',
     } as const;
 
-    private _meta: MetaBlockType
-    private eventBus: () => EventBus<EventsType>;
+    private eventBus: () => EventBus;
+
     private _element: HTMLElement | null = null; // сам элемент
 
     protected props: T;
 
     public id: string | null = null; // уникальный id для каждого блока на странице
-    public children: {[id: string]: Block} = {}; // потомки в элементе
 
-    public events: { [key: string]: HTMLElement } = {} // события (?)
+    public children: Record<string, Block | Block[]>; // потомки в элементе
+
+    public tagName: string;
+
+    // public events: { [key: string]: HTMLElement } | any; // события
 
     /** JSDoc
      * @param {string} tagName
-     * @param {Object} props
+     * @param {Object} initProps
      *
      * @returns {void}
      */
-    constructor({tagName, props}: T) {
+    constructor(tagName: string, initProps: T) {
         // конструктор - здесь собираем всё необходимое для дайльнейшей работы
+        const eventBus = new EventBus();
+
+        const { props, children } = this._getChildren(initProps);
+
+        this.id = v4();
+        this.children = children;
+        this.props = this._makeProxyProps({ ...props, id: this.id });
+        this.tagName = initProps.tagName;
+
+        this.eventBus = () => eventBus;
+
+        this._registerEvents(eventBus);
+        eventBus.emit(Block.EVENTS.INIT);
     }
 
-    private _registerEvents(eventBus: EventBus<EventsType>) {
+    private _getChildren(initProps: T): {
+        props: T
+        children: Record<string, Block | Block[]>
+    } {
+        const props: Record<string, unknown> = {};
+        const children: Record<string, Block | Block[]> = {};
+
+        Object.entries(initProps).forEach(([key, value]) => {
+            if (Array.isArray(value) && value.length > 0 && value.every((v) => v instanceof Block)) {
+                children[key as string] = value;
+            } else if (value instanceof Block) {
+                children[key as string] = value; // TODO типы
+            } else {
+                props[key] = value;
+            }
+        });
+
+        return { props: props as T, children };
+    }
+
+    private _init() {
+        // инициализация
+        this.init();
+        this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    }
+
+    private _registerEvents(eventBus: EventBus) {
         // регистрируем все доступные события
+        eventBus.on(Block.EVENTS.INIT, this._init.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
     }
 
-    private _createResources() {
-        // создает ресурс. Необходимо указать тег. Тег передается при создании объекта
-    }
-
-    private _componentDidMount(props: T) {
+    private _componentDidMount() {
         // то что должно происходить при монтировании элемента
+        this.componentDidMount();
     }
-
-    // public dispatchComponentDidMount
 
     private _componentDidUpdate(oldProps: T, newProps: T) {
         // то чот происходит при обновлении пропсов
+        if (this.componentDidUpdate(oldProps, newProps)) {
+            this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+        }
     }
 
     private _makeProxyProps(props: T) {
         // правила для работы с пропсами создание/изменение/удаление
+        const self = this;
+
+        return new Proxy(props, {
+            get(target: T, prop: string) {
+                if (typeof prop === 'string' && prop.indexOf('_') === 0) {
+                    throw new Error('No access');
+                }
+
+                const value: unknown = target[prop];
+                return typeof value === 'function' ? value.bind(target) : value;
+            },
+            set(target, prop, value) {
+                if (typeof prop === 'string' && prop.indexOf('_') === 0) {
+                    throw new Error('No access');
+                }
+                const oldTarget = { ...target };
+                target[prop as keyof T] = value;
+
+                self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
+                return true;
+            },
+        });
     }
 
     private _createDocumentElement(tagName: string) {
@@ -68,46 +126,131 @@ class Block<T extends object = {}> {
 
     private _addEvents() {
         // добавление событий. Необходимо занести их в events и навесить слушатели событий
+        const { events = {} } = this.props;
+        if (!events || !this._element) {
+            return;
+        }
+
+        Object.keys(events).forEach((event) => {
+            this._element.addEventListener(event, events[event]);
+        });
     }
 
     private _removeEvents() {
         // в случае удаления событий, необходимо убрать слушатели
+        const { events = {} } = this.props;
+
+        if (!events || !this._element) {
+            return;
+        }
+
+        Object.keys(events).forEach((event) => {
+            this._element?.removeEventListener(event, events[event]);
+        });
     }
 
-    private _addAttribute() {
-        // добавление атрибутов
+    private _addAttribute(): void {
+        const { attribute = {} } = this.props;
+        Object.entries(attribute).forEach(([key, value]) => {
+            this._element.setAttribute(key, String(value));
+        });
     }
 
-    private _compile(): DocumentFragment {
-        // собираем всех детей
-        const fragment = document.createElement("template");
+    public compile({ template, context }): DocumentFragment {
+        const contextAndDummies = { ...context };
 
-        return fragment.content;
+        Object.entries(this.children).forEach(([name, component]) => {
+            if (Array.isArray(component)) {
+                contextAndDummies[name] = component.map((child) => `<div data-id="${child.id}"></div>`);
+            } else {
+                contextAndDummies[name] = `<div data-id="${component.id}"></div>`;
+            }
+        });
+
+        const html = Handlebars.compile(template)(contextAndDummies);
+
+        const temp = document.createElement('template');
+        temp.innerHTML = html;
+
+        /**
+         * @description Replaces a dummy element with a real one, storing all childNodes in the component
+         *
+         * @param {Block} component (handlebars)
+         * */
+        const replaceDummy = (component: Block) => {
+            const dummy = temp.content.querySelector(`[data-id="${component.id}"]`);
+            if (!dummy) return;
+            component.getContent()?.append(...Array.from(dummy.childNodes));
+            dummy.replaceWith(component.getContent()!);
+        };
+
+        Object.entries(this.children).forEach(([_, component]) => {
+            if (Array.isArray(component)) {
+                component.forEach((comp) => replaceDummy(comp));
+            } else {
+                replaceDummy(component);
+            }
+        });
+
+        return temp.content;
     }
 
     // private _getChildren
 
     private _render() {
         // рендер элемента
+        const fragment = this.render();
+
+        const newElement = fragment.firstElementChild as HTMLElement;
+
+        if (this._element && newElement) {
+            this._element.replaceWith(newElement);
+        }
+
+        this._element = newElement;
+
+        this._removeEvents();
+        this._addEvents();
+        this._addAttribute();
     }
 
-    // ?
-    protected getStateFromProps(props: T) {}
+    // protected getStateFromProps(props: T) {}
 
-    protected render(): string {
-        return '';
+    protected render(): DocumentFragment {
+        return new DocumentFragment();
     }
 
-    public init() {
-        // инициализация
-    }
+    public init() {}
 
-    public componentDidMount(props: T) {} // может быть переопределено пользователем
+    public componentDidMount() {} // может быть переопределено пользователем
+
     public componentDidUpdate(oldProps: T, newProps: T) { return true; } // может быть переопределено пользователем
 
-    public setProps(nextProps: T) {
-        // изменение/добавление пропсов
+    public dispatchComponentDidMount() {
+        this.eventBus().emit(Block.EVENTS.FLOW_CDM);
+
+        Object.values(this.children).forEach((child) => {
+            if (Array.isArray(child)) {
+                child.forEach((ch) => ch.dispatchComponentDidMount());
+            } else {
+                child.dispatchComponentDidMount();
+            }
+        });
     }
+
+    public setProps(nextProps: T) {
+        // изменение пропсов
+        if (!nextProps) {
+            return;
+        }
+        Object.assign(this.props, nextProps);
+        this.componentDidUpdate(this.props, nextProps);
+    }
+
+    getProps = (key: string) =>
+        // прлучение значения одного пропса
+        this.props[key];
+
 
     get element() {
         // получение самого элемента

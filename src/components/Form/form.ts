@@ -10,53 +10,63 @@ type FormProps = {
 };
 
 class Form extends Block {
-    constructor(props: FormProps) {
-        super({tagName: 'form', title: '', isValid: true, ...props});
+    constructor({ ...props }: FormProps) {
+        super('form', { title: '', isValid: true, ...props });
     }
 
     init() {
         const controls = this.children.controls as Block[];
-        controls.forEach(control => {
+
+        controls.forEach((control) => {
             control.setProps({
-               validator: this.validate.bind(this)
+                validator: this.validate.bind(this),
             });
         });
 
         const buttons = this.children.buttons as Block[];
-        buttons.forEach(button => {
-            button.setProps({
-                events: {
-                    click: () => this.submit() //? сделать обработку разных кнопок
-                }
-            })
-        })
+        buttons.forEach((button) => {
+            if (button.getProps('type') === 'submit') {
+                const oldOnClick = button.getProps('events').click;
+                button.setProps({
+                    events: {
+                        click: () => {
+                            this.submit();
+                            if (oldOnClick) {
+                                oldOnClick();
+                            }
+                        },
+                    },
+                });
+            }
+        });
     }
 
     validate() {
-        const {inputs} = this.children.inputs;
-        const inputData = inputs.map(item => item.validate());
-        console.log('=form valid inputData', inputData);
+        const { controls = [] } = this.children;
+        const controlsData = controls.map((item) => item.validate());
 
-        this.props.data = inputData.reduce(
-          (result, {name, value}) => ({...result, [name]: value}),
-          {}
-        );
+        this.setProps({
+            data: controlsData.reduce(
+                (result, { name, value }) => ({ ...result, [name]: value }),
+                {},
+            ),
+        });
 
-        const noValidInputs = inputData.filter(item => !item.valid);
+        const noValidInputs = controlsData.filter((item) => !item.valid);
         if (noValidInputs.length > 0) {
-            this.setProps({isValid: false});
-            const warningMessage = noValidInputs.map(item => `- ${item.name} - ${item.errorMessage}`).join('\n');
+            this.setProps({ isValid: false });
+            const warningMessage = noValidInputs.map((item) => `- ${item.name} - ${item.errorMessage}`).join('\n');
             console.log('% The form has a problem: ', warningMessage);
         } else {
-            this.setProps({isValid: true});
+            this.setProps({ isValid: true });
         }
     }
 
     submit() {
         this.validate();
-        const dataForm = this.props.data;
-        console.log(`Data for form ${this.props.title}`);
-        if (this.props.valid) {
+        const dataForm = this.getProps('data');
+        console.log(`Data for form ${this.getProps('title')}`);
+        if (this.getProps('valid')) {
             console.log('Data form is valid. Go to next page');
         } else {
             console.log('Data is not valid. Need change information');
@@ -65,10 +75,7 @@ class Form extends Block {
     }
 
     render() {
-        return this.compile({
-            template: formTmpl,
-            props: this.props
-        });
+        return this.compile({ template: formTmpl, context: { ...this.props } });
     }
 }
 

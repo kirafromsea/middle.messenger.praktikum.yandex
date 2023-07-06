@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars';
 import { ChatsType, UserProfileType } from '../../types/chats.ts';
 import chatTmpl from './chat.tmpl.ts';
-import { Button, ChatItem } from '../../components/index.ts';
+import { ChatItem } from '../../components/index.ts';
 
 interface ChatPageProps {
  activeChat: string | null;
@@ -9,6 +9,7 @@ interface ChatPageProps {
  profile: UserProfileType;
 }
 
+/*
 const buttonSearch = Button({
     title: 'Search',
     onClick: '',
@@ -29,6 +30,7 @@ const buttonSend = Button({
     uiType: 'third',
     type: 'button',
 });
+ */
 
 const ChatPage = ({ activeChat, chats }: ChatPageProps) => {
     const chatList = chats.map((chat) => ChatItem({
@@ -38,11 +40,11 @@ const ChatPage = ({ activeChat, chats }: ChatPageProps) => {
     })).join('');
 
     return Handlebars.compile(chatTmpl)({
-        buttonSearch,
-        profileButton,
+        // buttonSearch,
+        // profileButton,
         activeChat,
         chatList,
-        buttonSend,
+        // buttonSend,
     });
 };
 

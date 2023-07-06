@@ -10,62 +10,63 @@ interface InputProps {
     required?: boolean;
     regExpValidate?: RegExp | null;
     events?: {
-        [key: string]: () => void;
-    };
+        [key: string]: () => void
+    }
 }
 
 class Input extends Block {
     constructor(props: InputProps) {
-        super({
-            tagName: 'input',
-            props: {
-                events: {},
-                regExpValidate: null,
-                required: false,
-                ...props
-            }
+        super('input', {
+            regExpValidate: null,
+            events: {},
+            required: false,
+            errorMessage: null,
+            ...props,
         });
     }
 
     init() {
-        if (this.props.regExpValidate) {
-            this.props.events.blur = () => this.validate();
-        }
+        this.setProps({
+            events: {
+                change: (e) => {
+                    this.setValue(e.target.value);
+                    this.validate();
+                },
+            },
+        });
     }
 
     validate() {
-        const inputItem = this.getContent();
-        const value = this.getValue();
-        const valid = this.getProps('regExpValidate').test(value);
-
-        if (this.props.required && (!value || value.trim() === '' )) {
-            this.props.errorMessage = 'Not required';
-            return;
-        }
-        if (inputItem) {
-            this.props.errorMessage = !valid ? 'Incorrect value' : null;
+        const value = this.getValue().trim() || '';
+        if (this.getProps('required') && (!value || value === '')) {
+            this.setProps({ errorMessage: 'Not required' });
+        } else if (this.getProps('regExpValidate')) {
+            const valid = this.getProps('regExpValidate').test(value);
+            this.setProps({ errorMessage: !valid ? 'Incorrect value' : null });
+        } else {
+            this.setProps({ errorMessage: null });
         }
 
         return {
-            name: this.props.name,
-            value: this.props.value,
-            isValid: !!this.props.errorMessage, // TODO Попробовать оставить только один параметр isValid или errorMessage
-            errorMessage: this.props.errorMessage
-        }
+            name: this.getProps('name'),
+            value: this.getProps('value'),
+            isValid: !!this.getProps('errorMessage'),
+            errorMessage: this.getProps('errorMessage'),
+        };
     }
 
     public setValue(value: string) {
-        return ((this.element as HTMLInputElement).value = value)
+        this.setProps({ value });
     }
 
     public getValue() {
-        return (this.element as HTMLInputElement).name;
+        return (this.element.getElementsByTagName('input') as HTMLInputElement)[0].value;
     }
 
     render() {
         return this.compile({
             template: inputTmpl,
-            props: this.props
+            context: this.props,
         });
     }
 }
