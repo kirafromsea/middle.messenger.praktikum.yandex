@@ -1,13 +1,14 @@
-import Handlebars from 'handlebars';
-import { ChatsType, UserProfileType } from '../../types/chats.ts';
+import Block from '../../classes/Block.ts';
+// import { ChatsType, UserProfileType } from '../../types/chats.ts';
 import chatTmpl from './chat.tmpl.ts';
-import { ChatItem } from '../../components/index.ts';
-
+//import { ChatItem } from '../../components/index.ts';
+/*
 interface ChatPageProps {
  activeChat: string | null;
  chats: ChatsType;
  profile: UserProfileType;
 }
+ */
 
 /*
 const buttonSearch = Button({
@@ -32,6 +33,7 @@ const buttonSend = Button({
 });
  */
 
+/*
 const ChatPage = ({ activeChat, chats }: ChatPageProps) => {
     const chatList = chats.map((chat) => ChatItem({
         displayName: chat.displayName || chat.login,
@@ -47,5 +49,15 @@ const ChatPage = ({ activeChat, chats }: ChatPageProps) => {
         // buttonSend,
     });
 };
+*/
+class ChatPage extends Block{
+    constructor() {
+        super('div', {});
+    }
+
+    render() {
+        return this.compile({ template: chatTmpl, context: { ...this.props } });
+    }
+}
 
 export default ChatPage;

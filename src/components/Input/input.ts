@@ -16,6 +16,7 @@ interface InputProps {
 
 class Input extends Block {
     constructor(props: InputProps) {
+        console.log('=props input', props);
         super('input', {
             regExpValidate: null,
             events: {},
@@ -50,7 +51,6 @@ class Input extends Block {
         return {
             name: this.getProps('name'),
             value: this.getProps('value'),
-            isValid: !!this.getProps('errorMessage'),
             errorMessage: this.getProps('errorMessage'),
         };
     }
@@ -60,7 +60,7 @@ class Input extends Block {
     }
 
     public getValue() {
-        return (this.element.getElementsByTagName('input') as HTMLInputElement)[0].value;
+        return (this.element.getElementsByTagName('input'))[0].value;
     }
 
     render() {

@@ -1,10 +1,11 @@
 import Block from '../../classes/Block.ts';
+import Input from '../Input/input.ts';
 import formTmpl from './form.tmpl.ts';
 
 type FormProps = {
-    title: string;
+    title?: string;
     events?: Record<string, Function>;
-    controls: Block[];
+    controls: Input[];
     buttons: Block[];
     formClassName: string;
 };
@@ -15,7 +16,7 @@ class Form extends Block {
     }
 
     init() {
-        const controls = this.children.controls as Block[];
+        const controls = this.children.controls as Input[];
 
         controls.forEach((control) => {
             control.setProps({
@@ -30,8 +31,8 @@ class Form extends Block {
                 button.setProps({
                     events: {
                         click: () => {
-                            this.submit();
-                            if (oldOnClick) {
+                            const result: boolean = this.submit();
+                            if (result && oldOnClick) {
                                 oldOnClick();
                             }
                         },
@@ -42,7 +43,7 @@ class Form extends Block {
     }
 
     validate() {
-        const { controls = [] } = this.children;
+        const controls = this.children.controls as Input[];
         const controlsData = controls.map((item) => item.validate());
 
         this.setProps({
@@ -52,7 +53,8 @@ class Form extends Block {
             ),
         });
 
-        const noValidInputs = controlsData.filter((item) => !item.valid);
+        const noValidInputs = controlsData.filter((item) => !!item.errorMessage);
+
         if (noValidInputs.length > 0) {
             this.setProps({ isValid: false });
             const warningMessage = noValidInputs.map((item) => `- ${item.name} - ${item.errorMessage}`).join('\n');
@@ -62,19 +64,24 @@ class Form extends Block {
         }
     }
 
-    submit() {
+    submit(): boolean {
         this.validate();
         const dataForm = this.getProps('data');
+
         console.log(`Data for form ${this.getProps('title')}`);
-        if (this.getProps('valid')) {
-            console.log('Data form is valid. Go to next page');
-        } else {
-            console.log('Data is not valid. Need change information');
-        }
         console.log(dataForm);
+
+        if (!this.getProps('isValid')) {
+            console.log('Data is not valid. Need change information');
+            return false;
+        }
+
+        console.log('Data form is valid. Go to next page');
+        return true;
     }
 
     render() {
+        console.log('=formRender');
         return this.compile({ template: formTmpl, context: { ...this.props } });
     }
 }

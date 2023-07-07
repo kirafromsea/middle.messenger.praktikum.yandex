@@ -24,10 +24,7 @@
 
   .user-info, .user-password {
     font-size: 12px;
-    div {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .form-field {
       margin-bottom: 6px;
 
       strong {

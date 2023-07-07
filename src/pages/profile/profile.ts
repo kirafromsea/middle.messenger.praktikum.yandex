@@ -1,38 +1,68 @@
-import Handlebars from 'handlebars';
+import chatInfo from '../../../public/chats.js';
+import Block from '../../classes/Block.ts';
+import Avatar from '../../components/Avatar/avatar.ts';
 import profileTmpl from './profile.tmpl.ts';
-// import { Button } from '../../components/index.ts';
-import { UserProfileType } from '../../types/chats.ts';
+import Input from "../../components/Input/input.ts";
+import Button from "../../components/Button/button.ts";
+import Form from "../../components/Form/form.ts";
+import {controlsPassword, controlsProfile} from './controlsInputSettings.ts';
+import {passwordFormButtons, profileFormButtons} from './buttonsSettings.ts';
 
-interface ProfileProps {
-  profile: UserProfileType;
+class ProfilePage extends Block {
+    constructor() {
+        super('div', {});
+    }
+
+    init() {
+        if (!chatInfo.profile || !chatInfo.profile.login) {
+            window.location.href = '/error/401';
+            return;
+        }
+        const profileFormInput = controlsProfile.map((item) => new Input({
+                ...item,
+                value: chatInfo.profile[item.name] || '',
+            })
+        );
+
+        const buttonsProfile = profileFormButtons.map((item) => new Button({ ...item }));
+
+        this.children.profileForm = new Form({
+            controls: profileFormInput,
+            buttons: buttonsProfile,
+            formClassName: 'user-info',
+        });
+
+        const passwordFormInputs = controlsPassword.map((item) => new Input({
+                ...item,
+                value: chatInfo.profile[item.name] || '',
+            })
+        );
+
+        const buttonsPassword = passwordFormButtons.map((item) => new Button({ ...item }));
+
+        this.children.passwordForm = new Form({
+            controls: passwordFormInputs,
+            buttons: buttonsPassword,
+            formClassName: 'user-password',
+        });
+
+        this.children.returnButton =  new Button({
+            title: 'X',
+            uiType: 'third',
+            type: 'button',
+            events: {
+                onClick: () => {
+                    window.location.href = '/chat';
+                },
+            },
+        });
+
+        this.children.avatar = new Avatar({avatarUrl: chatInfo.profile.avatar});
+    }
+
+    render() {
+        return this.compile({ template: profileTmpl, context: { ...this.props } });
+    }
 }
-/*
-const sendProfileButton = Button({
-    title: 'Save profile',
-    onClick: '',
-    uiType: 'primary',
-    type: 'submit',
-});
-
-const sendPasswordButton = Button({
-    title: 'Save new password',
-    onClick: '',
-    uiType: 'primary',
-    type: 'button',
-});
-
-const returnButton = Button({
-    title: 'X',
-    onClick: "window.location.href='/chat'",
-    uiType: 'third',
-    type: 'button',
-});
-*/
-const ProfilePage = ({ profile }: ProfileProps) => Handlebars.compile(profileTmpl)({
-    profile,
-    // returnButton,
-    // sendProfileButton,
-    // sendPasswordButton,
-});
 
 export default ProfilePage;
