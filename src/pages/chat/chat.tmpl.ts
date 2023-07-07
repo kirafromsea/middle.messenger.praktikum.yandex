@@ -1,6 +1,18 @@
 const chatTmpl = `
   <div class="chat-page">
     <div class="chat-left">
+        Right
+    </div>
+    <div class="chat-right">
+        Left
+    </div>
+  </div>
+`;
+
+export default chatTmpl;
+
+/*
+<div class="chat-left">
         <div class="chat-header">
             <input class="chat-search" /> {{{buttonSearch}}}
         </div>
@@ -16,7 +28,4 @@ const chatTmpl = `
         <div class="chat-massages">Messages</div>
         <div class="chat-bottom"><input class="chat-message--new" /> {{{buttonSend}}}</div>
     </div>
-  </div>
-`;
-
-export default chatTmpl;
+ */

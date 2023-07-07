@@ -3,7 +3,7 @@ const inputTmpl = `
     <input
       data-id={{id}}
       name={{name}}
-      placeholder={{placeholder}}
+      placeholder="{{placeholder}}"
       class="{{#if errorMessage}}input--error{{/if}}"
       type="{{type}}"
       value="{{value}}"

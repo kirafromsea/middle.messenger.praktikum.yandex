@@ -1,7 +1,7 @@
 import Block from '../../classes/Block.ts';
 import Form from '../../components/Form/form.ts';
 import Input from '../../components/Input/input.ts';
-import Button from '../../components/Button/button.ts';
+import Button, {ButtonProps} from '../../components/Button/button.ts';
 import loginTmpl from './login.tmpl.ts';
 
 const controlsData = [
@@ -11,7 +11,7 @@ const controlsData = [
         value: '',
         placeholder: 'Username',
         required: true,
-        regExpValidate: /^[a-z]+([-_]?[a-z0-9]+){0,2}$/i,
+        regExpValidate: /^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/,
         description: '', // добавить аннотацию для допустимых символов
     },
     {
@@ -22,14 +22,16 @@ const controlsData = [
     },
 ];
 
-const buttonsData = [
+const buttonsData: ButtonProps[] = [
     {
-        title: 'Login',
+        title: 'Log In',
         uiType: 'primary',
         type: 'submit',
+        disabled: false,
         events: {
             onClick: (e) => {
                 console.log('=onclick submit e', e);
+                window.location.href = '/chat';
             },
         },
     },
@@ -37,6 +39,7 @@ const buttonsData = [
         title: 'Sign Up',
         uiType: 'ghost',
         type: 'button',
+        disabled: false,
         events: {
             onClick: (e) => {
                 e.preventDefault();

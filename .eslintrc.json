@@ -15,25 +15,23 @@
   "rules": {
     "no-console": "off",
     "no-unused-vars": "off",
-    "no-param-reassign": 0,
-    "no-use-before-define": [
+    
+
+    "max-params": [2, 3],
+    "prettier/prettier": [
       "error",
       {
-        "functions": false,
-        "classes": false,
-        "variables": false,
-        "allowNamedExports": false
+        "singleQuote": true,
+        "endOfLine": "off"
       }
     ],
+    
+    "no-param-reassign": 0,
     "no-underscore-dangle": 0,
     "default-param-last": 0,
     "max-len": [
       2,
       200
-    ],
-    "indent": [
-      "error",
-      4
     ],
     "linebreak-style": [
       "error",

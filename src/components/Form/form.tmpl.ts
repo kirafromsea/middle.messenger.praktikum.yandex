@@ -1,6 +1,8 @@
 const formTmpl = `
     <form action="javascript:void(0);" class="{{formClassName}}">
-        <h2 class="{{formClassName}}__title">{{title}}</h2>
+        {{#if title}}
+            <h2 class="{{formClassName}}__title">{{title}}</h2>
+        {{/if}}
         {{#each controls}}
             {{{this}}}
         {{/each}}
@@ -11,9 +13,3 @@ const formTmpl = `
 `;
 
 export default formTmpl;
-/*
-// class="{{formClassName}}"
-<h2 class="{{formClassName}}__title">{{title}}</h2>
-        {{{formControls}}
-        {{{formButton}}}
- */

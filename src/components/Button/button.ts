@@ -6,9 +6,9 @@ export type ButtonProps = {
   onClick?: () => void;
   uiType?: 'primary' | 'secondary' | 'third' | 'ghost';
   type?: 'button' | 'submit';
-  disabled?: boolean
+  disabled?: boolean;
   events?: {
-    [key: string]: () => void
+    [key: string]: (e?) => void
   }
 }
 

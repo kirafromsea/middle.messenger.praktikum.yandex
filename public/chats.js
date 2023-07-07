@@ -2,7 +2,7 @@ const profile = {
   first_name: 'Rigel',
   second_name: 'Kastor',
   login: 'betelgeuse',
-  displayName: 'Rigel Betelgeuse Kastor II',
+  display_mame: 'Rigel Betelgeuse Kastor II',
   email: 'rigel_kastor@space',
   password: 'tree_star',
   phone: '+07892221415',
@@ -11,7 +11,7 @@ const profile = {
 
 const chats = [
   {
-    displayName: 'Link',
+    display_name: 'Link',
     login: 'link',
     avatar: '/avatars/avatar1.jpg',
     messages: [
@@ -23,7 +23,7 @@ const chats = [
     ]
   },
   {
-    displayName: 'Sydon',
+    display_name: 'Sydon',
     login: 'sydon_sea',
     avatar: '/avatars/avatar3.jpeg',
     messages: [
@@ -35,7 +35,7 @@ const chats = [
     ]
   },
   {
-    displayName: 'Mipha',
+    display_name: 'Mipha',
     login: 'mipha_sea',
     avatar: '/avatars/avatar2.jpeg',
     messages: [

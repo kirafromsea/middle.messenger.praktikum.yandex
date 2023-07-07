@@ -22,7 +22,7 @@ class Block<T extends object = {}> {
 
     public tagName: string;
 
-    // public events: { [key: string]: HTMLElement } | any; // события
+    public events: { [key: string]: HTMLElement } | any; // события
 
     /** JSDoc
      * @param {string} tagName
@@ -39,12 +39,13 @@ class Block<T extends object = {}> {
         this.id = v4();
         this.children = children;
         this.props = this._makeProxyProps({ ...props, id: this.id });
-        this.tagName = initProps.tagName;
+        this.tagName = tagName;
 
         this.eventBus = () => eventBus;
 
         this._registerEvents(eventBus);
         eventBus.emit(Block.EVENTS.INIT);
+        console.log('=this', this);
     }
 
     private _getChildren(initProps: T): {
@@ -119,11 +120,6 @@ class Block<T extends object = {}> {
         });
     }
 
-    private _createDocumentElement(tagName: string) {
-        // создание элемента с указанным тегом
-        return document.createElement(tagName);
-    }
-
     private _addEvents() {
         // добавление событий. Необходимо занести их в events и навесить слушатели событий
         const { events = {} } = this.props;
@@ -149,15 +145,9 @@ class Block<T extends object = {}> {
         });
     }
 
-    private _addAttribute(): void {
-        const { attribute = {} } = this.props;
-        Object.entries(attribute).forEach(([key, value]) => {
-            this._element.setAttribute(key, String(value));
-        });
-    }
-
     public compile({ template, context }): DocumentFragment {
         const contextAndDummies = { ...context };
+        console.log('=contextAndDummies', contextAndDummies);
 
         Object.entries(this.children).forEach(([name, component]) => {
             if (Array.isArray(component)) {
@@ -166,9 +156,9 @@ class Block<T extends object = {}> {
                 contextAndDummies[name] = `<div data-id="${component.id}"></div>`;
             }
         });
-
+        console.log('=compile html 1');
         const html = Handlebars.compile(template)(contextAndDummies);
-
+        console.log('=compile html 2', html);
         const temp = document.createElement('template');
         temp.innerHTML = html;
 
@@ -195,8 +185,6 @@ class Block<T extends object = {}> {
         return temp.content;
     }
 
-    // private _getChildren
-
     private _render() {
         // рендер элемента
         const fragment = this.render();
@@ -211,7 +199,6 @@ class Block<T extends object = {}> {
 
         this._removeEvents();
         this._addEvents();
-        this._addAttribute();
     }
 
     // protected getStateFromProps(props: T) {}
