@@ -1,8 +1,8 @@
 import Block from '../../classes/Block.ts';
 import registrationTmpl from './registration.tmpl.ts';
-import Button, {ButtonProps} from "../../components/Button/button.ts";
-import Input from "../../components/Input/input.ts";
-import Form from "../../components/Form/form.ts";
+import Button, {ButtonProps} from "../../ui-components/Button/button.ts";
+import Input from "../../ui-components/Input/input.ts";
+import Form from "../../ui-components/Form/form.ts";
 import {
     EMAIL_REGEXP,
     NAME_REGEXP,

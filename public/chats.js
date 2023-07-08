@@ -16,9 +16,24 @@ const chats = [
     avatar: '/avatars/avatar1.jpg',
     messages: [
       {
-        author: 'you',
-        date: '',
-        message: ''
+        author: 'self',
+        date: '05/06/2023',
+        message: 'Привет, Линк! Пойдем поедим пончиков?'
+      },
+      {
+        author: 'companion',
+        date: '05/06/2023',
+        message: 'Привет! Минут через 5. Мне опять нужно доставить корока к его другу'
+      },
+      {
+        author: 'self',
+        date: '05/06/2023',
+        message: 'Зови его с собой. Тут на всех хватит.'
+      },
+      {
+        author: 'self',
+        date: '05/06/2023',
+        message: 'Только молоко захватите.'
       }
     ]
   },
@@ -28,9 +43,9 @@ const chats = [
     avatar: '/avatars/avatar3.jpeg',
     messages: [
       {
-        author: 'you',
-        date: '',
-        message: ''
+        author: 'self',
+        date: '05/06/2023',
+        message: 'Привет!'
       }
     ]
   },
@@ -40,9 +55,9 @@ const chats = [
     avatar: '/avatars/avatar2.jpeg',
     messages: [
       {
-        author: 'you',
-        date: '',
-        message: ''
+        author: 'self',
+        date: '05/06/2023',
+        message: 'Привет! Сегодня идем все в деревню Какарико.Там пончики с неба упали'
       }
     ]
   }

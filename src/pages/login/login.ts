@@ -1,7 +1,7 @@
 import Block from '../../classes/Block.ts';
-import Form from '../../components/Form/form.ts';
-import Input from '../../components/Input/input.ts';
-import Button, {ButtonProps} from '../../components/Button/button.ts';
+import Form from '../../ui-components/Form/form.ts';
+import Input from '../../ui-components/Input/input.ts';
+import Button, {ButtonProps} from '../../ui-components/Button/button.ts';
 import loginTmpl from './login.tmpl.ts';
 
 const controlsData = [

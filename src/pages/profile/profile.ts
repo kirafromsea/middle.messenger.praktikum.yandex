@@ -1,10 +1,10 @@
 import chatInfo from '../../../public/chats.js';
 import Block from '../../classes/Block.ts';
-import Avatar from '../../components/Avatar/avatar.ts';
+import Avatar from '../../ui-components/Avatar/avatar.ts';
 import profileTmpl from './profile.tmpl.ts';
-import Input from "../../components/Input/input.ts";
-import Button from "../../components/Button/button.ts";
-import Form from "../../components/Form/form.ts";
+import Input from "../../ui-components/Input/input.ts";
+import Button from "../../ui-components/Button/button.ts";
+import Form from "../../ui-components/Form/form.ts";
 import {controlsPassword, controlsProfile} from './controlsInputSettings.ts';
 import {passwordFormButtons, profileFormButtons} from './buttonsSettings.ts';
 

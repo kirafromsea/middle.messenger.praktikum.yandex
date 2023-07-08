@@ -81,7 +81,6 @@ class Form extends Block {
     }
 
     render() {
-        console.log('=formRender');
         return this.compile({ template: formTmpl, context: { ...this.props } });
     }
 }

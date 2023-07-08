@@ -2,7 +2,7 @@ import Handlebars from 'handlebars';
 import errorTmpl from './error.tmpl.ts';
 import errors, { defaultErrorMessage } from './errorsList.ts';
 import { ErrorProps, ErrorsType } from './types.ts';
-// import Button from '../../components/Button/button.ts';
+// import Button from '../../ui-components/Button/button.ts';
 
 /*
 const indexPageButton = Button({

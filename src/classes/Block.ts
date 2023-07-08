@@ -45,7 +45,6 @@ class Block<T extends object = {}> {
 
         this._registerEvents(eventBus);
         eventBus.emit(Block.EVENTS.INIT);
-        console.log('=this', this);
     }
 
     private _getChildren(initProps: T): {
@@ -89,9 +88,11 @@ class Block<T extends object = {}> {
 
     private _componentDidUpdate(oldProps: T, newProps: T) {
         // то чот происходит при обновлении пропсов
-        if (this.componentDidUpdate(oldProps, newProps)) {
-            this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
-        }
+        console.log('=component update', oldProps, newProps);
+
+        const response = this.componentDidUpdate(oldProps, newProps);
+        if (!response) return;
+        this._render();
     }
 
     private _makeProxyProps(props: T) {
@@ -147,7 +148,6 @@ class Block<T extends object = {}> {
 
     public compile({ template, context }): DocumentFragment {
         const contextAndDummies = { ...context };
-        console.log('=contextAndDummies', contextAndDummies);
 
         Object.entries(this.children).forEach(([name, component]) => {
             if (Array.isArray(component)) {
@@ -156,9 +156,9 @@ class Block<T extends object = {}> {
                 contextAndDummies[name] = `<div data-id="${component.id}"></div>`;
             }
         });
-        console.log('=compile html 1');
+
         const html = Handlebars.compile(template)(contextAndDummies);
-        console.log('=compile html 2', html);
+
         const temp = document.createElement('template');
         temp.innerHTML = html;
 
@@ -187,6 +187,7 @@ class Block<T extends object = {}> {
 
     private _render() {
         // рендер элемента
+        console.log('=render');
         const fragment = this.render();
 
         const newElement = fragment.firstElementChild as HTMLElement;
@@ -230,8 +231,9 @@ class Block<T extends object = {}> {
         if (!nextProps) {
             return;
         }
+        const oldProps = {...this.props};
         Object.assign(this.props, nextProps);
-        this.componentDidUpdate(this.props, nextProps);
+        this._componentDidUpdate(oldProps, this.props);
     }
 
     getProps = (key: string) =>

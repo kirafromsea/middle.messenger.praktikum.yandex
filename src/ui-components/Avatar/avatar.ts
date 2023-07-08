@@ -6,7 +6,6 @@ type AvatarProps = {
 }
 class Avatar extends Block {
     constructor(props: AvatarProps) {
-        console.log('=avatarprops', props);
         super('div', {
             ...props,
         });

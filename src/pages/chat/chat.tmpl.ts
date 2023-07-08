@@ -1,31 +1,28 @@
 const chatTmpl = `
   <div class="chat-page">
     <div class="chat-left">
-        Right
-    </div>
-    <div class="chat-right">
-        Left
-    </div>
-  </div>
-`;
-
-export default chatTmpl;
-
-/*
-<div class="chat-left">
-        <div class="chat-header">
-            <input class="chat-search" /> {{{buttonSearch}}}
-        </div>
+        {{{searchForm}}}
         <div class="chat-list">
           <ul>
-              {{{chatList}}}
+            {{#each chatsList}}
+                {{{this}}}
+            {{/each}}
           </ul>
         </div>
         <div class="chat-bottom">{{{profileButton}}}</div>
     </div>
     <div class="chat-right">
-        <div class="chat-header"></div>
-        <div class="chat-massages">Messages</div>
-        <div class="chat-bottom"><input class="chat-message--new" /> {{{buttonSend}}}</div>
+        <div class="chat-right">
+            <div class="chat-header"></div>
+            <div class="chat-massages">
+              {{#each messageList}}  
+                {{{this}}}
+              {{/each}}
+            </div>
+            {{{messageForm}}}
+        </div>
     </div>
- */
+  </div>
+`;
+
+export default chatTmpl;

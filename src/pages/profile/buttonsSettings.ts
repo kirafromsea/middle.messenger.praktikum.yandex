@@ -1,4 +1,4 @@
-import {ButtonProps} from "../../components/Button/button.ts";
+import {ButtonProps} from "../../ui-components/Button/button.ts";
 
 export const profileFormButtons: ButtonProps[] = [
     {

@@ -77,9 +77,14 @@
   .chat-header, .chat-bottom {
     display: flex;
     align-items: center;
-    height: 50px;
+    height: 70px;
+    overflow: hidden;
     padding: 4px 12px;
     justify-content: stretch;
+
+    .form-field {
+      margin-bottom: 0;
+    }
   }
 }
 
