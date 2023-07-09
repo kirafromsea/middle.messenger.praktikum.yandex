@@ -8,7 +8,7 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "strict": false,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
     "noFallthroughCasesInSwitch": true,
