@@ -1,25 +1,20 @@
-import Handlebars from 'handlebars';
+import Block from '../../classes/Block';
 import errorTmpl from './error.tmpl.ts';
 import errors, { defaultErrorMessage } from './errorsList.ts';
-import { ErrorProps, ErrorsType } from './types.ts';
-// import Button from '../../ui-components/Button/button.ts';
+import { ErrorProps } from './types.ts';
 
-/*
-const indexPageButton = Button({
-    title: 'Go to index page',
-    onClick: "window.location.href='/'",
-    uiType: 'primary',
-    type: 'button',
-});
-*/
-const ErrorPage = ({ errorCode }: ErrorProps) => {
-    const errorIndex: ErrorsType = `error_${errorCode}`;
+class ErrorPage extends Block {
+    constructor(props: ErrorProps) {
+        const errorIndex = `error_${props.errorCode}`;
+        super('div', {
+            errorNumber: props.errorCode,
+            errorMessage: errors[errorIndex] || defaultErrorMessage,
+        });
+    }
 
-    return Handlebars.compile(errorTmpl)({
-        errorNumber: errorCode,
-        errorMessage: errors[errorIndex] || defaultErrorMessage,
-    // button: indexPageButton,
-    });
-};
+    render() {
+        return this.compile({ template: errorTmpl, context: this.props });
+    }
+}
 
 export default ErrorPage;

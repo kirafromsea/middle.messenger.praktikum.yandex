@@ -13,7 +13,7 @@
     "allowImportingTsExtensions": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "noImplicitAny": true
   },
   "include": ["src"]
 }
