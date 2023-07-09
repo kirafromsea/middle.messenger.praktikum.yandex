@@ -1,12 +1,12 @@
+import chatInfo from '../../../public/chats';
 import Block from '../../classes/Block';
-import chatTmpl from './chat.tmpl';
 import Button from '../../ui-components/Button/button';
 import Input from '../../ui-components/Input/input';
 import Form from '../../ui-components/Form/form';
 import {ChatItem} from '../../ui-components/index';
-import chatInfo from '../../../public/chats.js';
 import MessageItem from '../../ui-components/MessageItem/messageItem';
 import {MESSAGE_TYPE_SELF} from '../../utils/constants';
+import chatTmpl from './chat.tmpl';
 
 class ChatPage extends Block {
   constructor() {
@@ -76,7 +76,9 @@ class ChatPage extends Block {
 
     const {chats} = chatInfo;
     this.children.chatsList = chats.map((item) => new ChatItem({
-      ...item,
+      display_name: item.display_name,
+      login: item.login || null,
+      avatar: item.avatar || '',
       events: {
         onClick: (login) => {
           this.changeChat(login);
@@ -87,16 +89,16 @@ class ChatPage extends Block {
     this.changeChat(this.getProps('activeChat'));
   }
 
-  changeChat(login) {
+  changeChat(login?: string | null) {
     const {chats, profile} = chatInfo;
-    if (login) {
+    if (login && login.trim() !== '') {
       const activeChat = chats.filter((item) => item.login === login)[0];
       if (activeChat?.messages?.length > 0) {
         this.children.messageList = activeChat.messages.map((message) => new MessageItem({
-          avatar: message.author === MESSAGE_TYPE_SELF ? profile.avatar : activeChat.avatar,
+          avatar: (message.author === MESSAGE_TYPE_SELF ? profile.avatar : activeChat.avatar) || '',
           message: message.message,
-          data: message.data,
-          type: message.author,
+          date: message.date,
+          type: message.author === 'self' ? message.author : 'companion',
         }));
       }
     }

@@ -1,4 +1,5 @@
-import chatInfo from '../../../public/chats.js';
+import chatInfo from '../../../public/chats';
+import {ChatsInfoType} from '../../types/chats';
 import Block from '../../classes/Block';
 import Avatar from '../../ui-components/Avatar/avatar';
 import profileTmpl from './profile.tmpl';
@@ -14,13 +15,25 @@ class ProfilePage extends Block {
   }
 
   init() {
-    if (!chatInfo.profile || !chatInfo.profile.login) {
+    const {profile} = chatInfo as ChatsInfoType;
+    if (!profile || !profile.login) {
       window.location.href = '/error/401';
       return;
     }
+
     const profileFormInput = controlsProfile.map((item) => new Input({
-      ...item,
-      value: chatInfo.profile[item.name] || '',
+      name: 'search',
+      type: 'text',
+      value: profile[item.name as string] as string,
+      description: '',
+      placeholder: 'User name',
+      required: false,
+      regExpValidate: null,
+      events: {
+        change: (e?: Event) => {
+          console.log('= search user ', e);
+        },
+      },
     }));
 
     const buttonsProfile = profileFormButtons.map((item) => new Button({...item}));
@@ -33,7 +46,7 @@ class ProfilePage extends Block {
 
     const passwordFormInputs = controlsPassword.map((item) => new Input({
       ...item,
-      value: chatInfo.profile[item.name] || '',
+      value: profile[item.name] || '',
     }));
 
     const buttonsPassword = passwordFormButtons.map((item) => new Button({...item}));
@@ -55,7 +68,7 @@ class ProfilePage extends Block {
       },
     });
 
-    this.children.avatar = new Avatar({avatarUrl: chatInfo.profile.avatar});
+    this.children.avatar = new Avatar({url: profile.avatar || ''});
   }
 
   render() {

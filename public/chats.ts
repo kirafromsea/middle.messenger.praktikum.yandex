@@ -1,4 +1,5 @@
-const profile = {
+import {ChatsInfoType, UserProfileType, ChatsType} from '../src/types/chats';
+const profile: UserProfileType = {
   first_name: 'Rigel',
   second_name: 'Kastor',
   login: 'betelgeuse',
@@ -9,7 +10,7 @@ const profile = {
   avatar: '/avatars/rigel.jpg'
 };
 
-const chats = [
+const chats: ChatsType = [
   {
     display_name: 'Link',
     login: 'link',
@@ -63,7 +64,9 @@ const chats = [
   }
 ];
 
-export default {
+const chatInfo: ChatsInfoType = {
   profile,
   chats
-}
+};
+
+export default chatInfo;

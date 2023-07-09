@@ -22,8 +22,12 @@ export const passwordFormButtons: ButtonProps[] = [
     type: 'submit',
     disabled: false,
     events: {
-      onClick: (e: Event) => {
-        console.log('Save new password', e);
+      onClick: (e?: Event) => {
+        if (!e) {
+          return;
+        }
+        const field = document.querySelector(`[name=${(e.target as HTMLInputElement).name}]`) as HTMLInputElement;
+        console.log('Save new password', field.value);
         // добавить вывод "все успешно сохранено"
       },
     },

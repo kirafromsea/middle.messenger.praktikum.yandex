@@ -10,7 +10,7 @@ interface InputProps {
     required?: boolean;
     regExpValidate?: RegExp | null;
     events?: {
-        [key: string]: () => void
+        [key: string]: (e?: Event) => void
     }
 }
 
@@ -29,7 +29,8 @@ class Input extends Block {
     this.setProps({
       events: {
         change: (e: Event) => {
-          this.setValue(e.target.value);
+          const field = document.querySelector(`[name=${(e.target as HTMLInputElement).name}]`) as HTMLInputElement;
+          this.setValue(field.value);
           this.validate();
         },
       },
@@ -59,7 +60,8 @@ class Input extends Block {
   }
 
   public getValue() {
-    return (this.getContent().getElementsByTagName('input'))[0].value;
+    const field = this.element as HTMLElement;
+    return (field.getElementsByTagName('input'))[0].value;
   }
 
   render() {

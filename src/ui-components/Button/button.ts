@@ -8,7 +8,7 @@ export type ButtonProps = {
   type?: 'button' | 'submit';
   disabled?: boolean;
   events?: {
-    [key: string]: (e?) => void
+    [key: string]: (e?: Event) => void
   }
 }
 

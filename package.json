@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --port 8080",
-    "start": "vite build; vite preview",
+    "start": "vite build; vite preview --port 3000",
     "start:server": "node ./server/server.js ",
     "typescript": "tsc --noEmit",
     "lint": "eslint . --ext .ts --fix",

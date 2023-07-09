@@ -8,7 +8,7 @@ class ErrorPage extends Block {
     const errorIndex = `error_${props.errorCode}`;
     super('div', {
       errorNumber: props.errorCode,
-      errorMessage: errors[errorIndex] || defaultErrorMessage,
+      errorMessage: (errorIndex.trim() !== '' && errors[errorIndex]) ? errors[errorIndex] : defaultErrorMessage,
     });
   }
 

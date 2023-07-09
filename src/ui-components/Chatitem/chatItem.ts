@@ -10,7 +10,6 @@ interface ChatItemProps extends Omit<ChatItemType, 'messages'> {
 
 class ChatItem extends Block {
   constructor(props: ChatItemProps) {
-    console.log('=chat props', props);
     super('div', {...props});
   }
 

@@ -24,7 +24,7 @@ interface QueryRequestType {
   options: OptionsType & {
     method?: string;
   };
-  timeout: number;
+  timeout?: number;
 }
 
 const METHODS = {
@@ -55,7 +55,7 @@ class HTTPTransport {
             let reqUrl = url;
 
             console.log(method === METHODS.GET);
-            if (method === METHODS.GET) {
+            if (method === METHODS.GET && !!data) {
                 reqUrl = `${url}${queryStringify(data)}`;
             }
 

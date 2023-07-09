@@ -30,8 +30,7 @@ const buttonsData: ButtonProps[] = [
     type: 'submit',
     disabled: false,
     events: {
-      onClick: (e: Event) => {
-        console.log('=onclick submit e', e);
+      onClick: () => {
         window.location.href = '/chat';
       },
     },
@@ -42,7 +41,10 @@ const buttonsData: ButtonProps[] = [
     type: 'button',
     disabled: false,
     events: {
-      onClick: (e: Event) => {
+      onClick: (e?: Event) => {
+        if (!e) {
+          return;
+        }
         e.preventDefault();
         window.location.href = '/signup';
       },

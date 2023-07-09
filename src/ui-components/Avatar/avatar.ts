@@ -2,7 +2,7 @@ import Block from '../../classes/Block';
 import avatarTmpl from './avatar.tmpl';
 
 type AvatarProps = {
-    avatarUrl: string;
+    url: string;
 }
 class Avatar extends Block {
   constructor(props: AvatarProps) {

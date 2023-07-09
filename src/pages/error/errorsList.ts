@@ -1,6 +1,10 @@
 export const defaultErrorMessage = 'An unexpected error has occurred';
 
-const errors = {
+interface ErrorsType {
+  [k: string]: string;
+}
+
+const errors: ErrorsType = {
   error_500: 'Internal Server Error',
   error_502: 'Bad Gateway',
   error_504: 'Gateway Timeout',

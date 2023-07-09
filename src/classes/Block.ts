@@ -2,7 +2,7 @@ import Handlebars from 'handlebars';
 import {v4} from 'uuid';
 import EventBus from './EventBus';
 
-class Block<T extends object> {
+class Block<T extends Record<string, any> = any> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -23,7 +23,7 @@ class Block<T extends object> {
 
   public tagName: string;
 
-  public events?: { [key: string]: HTMLElement } | any; // события
+  public events?: { [key: string]: HTMLElement }; // события
 
   /** JSDoc
      * @param {string} tagName
@@ -145,7 +145,7 @@ class Block<T extends object> {
     });
   }
 
-  public compile({template, context = {}}): DocumentFragment {
+  public compile({template, context = {}}: {template: string; context: {[k: string]: unknown}}): DocumentFragment {
     Object.entries(this.children).forEach(([name, component]) => {
       if (Array.isArray(component)) {
         context[name] = component.map((child) => `<div data-id="${child.id}"></div>`);
@@ -223,16 +223,20 @@ class Block<T extends object> {
     if (!nextProps) {
       return;
     }
-    const oldProps = {...this.props};
+
     Object.assign(this.props, nextProps);
-    this._componentDidUpdate(oldProps, this.props);
+    this._componentDidUpdate();
   }
 
   public getProps(key: string) {
     return this.props[key];
   }
 
-  public getContent(): HTMLElement {
+  get element() {
+    return this._element;
+  }
+
+  public getContent() {
     // получение контента
     return this._element;
   }

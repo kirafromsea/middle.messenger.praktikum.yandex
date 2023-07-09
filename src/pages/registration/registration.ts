@@ -84,8 +84,8 @@ const buttonsData: ButtonProps[] = [
     type: 'button',
     disabled: false,
     events: {
-      onClick: (e: Event) => {
-        e.preventDefault();
+      onClick: (e?: Event) => {
+        e?.preventDefault();
         window.location.href = '/login';
       },
     },
