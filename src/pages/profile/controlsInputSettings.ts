@@ -3,8 +3,9 @@
 import {
   NAME_REGEXP, PASSWORD_REGEXP, EMAIL_REGEXP, PHONE_REGEXP, USERNAME_REGEXP,
 } from '../../utils/validationRegexp';
+import {InputProps} from '../../ui-components/Input/input';
 
-export const controlsProfile = [
+export const controlsProfile: InputProps[] = [
   {
     name: 'first_name',
     type: 'text',
@@ -59,7 +60,7 @@ export const controlsProfile = [
   },
 ];
 
-export const controlsPassword = [
+export const controlsPassword: InputProps[] = [
   {
     name: 'oldPassword',
     type: 'password',
