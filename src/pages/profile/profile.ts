@@ -23,7 +23,7 @@ class ProfilePage extends Block {
 
     const profileFormInput = controlsProfile.map((item) => new Input({
       ...item,
-      value: profile[item.name as string] as string
+      value: profile[item.name as string] as string,
     }));
 
     const buttonsProfile = profileFormButtons.map((item) => new Button({...item}));
