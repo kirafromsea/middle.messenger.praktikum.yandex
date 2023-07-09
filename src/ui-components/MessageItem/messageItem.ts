@@ -1,6 +1,6 @@
-import Block from '../../classes/Block.ts';
-import { MESSAGE_TYPE_SELF, MESSAGE_TYPE_COMPANION } from '../../utils/constants.ts';
-import messageItemTmpl from './messageItem.tmpl.ts';
+import Block from '../../classes/Block';
+import {MESSAGE_TYPE_SELF, MESSAGE_TYPE_COMPANION} from '../../utils/constants';
+import messageItemTmpl from './messageItem.tmpl';
 
 interface MessageItemProps {
     avatar: string;
@@ -9,13 +9,13 @@ interface MessageItemProps {
     type: typeof MESSAGE_TYPE_SELF | typeof MESSAGE_TYPE_COMPANION;
 }
 class MessageItem extends Block {
-    constructor(props: MessageItemProps) {
-        super('div', { ...props });
-    }
+  constructor(props: MessageItemProps) {
+    super('div', {...props});
+  }
 
-    render() {
-        return this.compile({ template: messageItemTmpl, context: this.props });
-    }
+  render() {
+    return this.compile({template: messageItemTmpl, context: this.props});
+  }
 }
 
 export default MessageItem;

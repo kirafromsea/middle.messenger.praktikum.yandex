@@ -1,5 +1,5 @@
-import Block from '../../classes/Block.ts';
-import buttonTmpl from './button.tmpl.ts';
+import Block from '../../classes/Block';
+import buttonTmpl from './button.tmpl';
 
 export type ButtonProps = {
   title: string;
@@ -13,28 +13,28 @@ export type ButtonProps = {
 }
 
 class Button extends Block {
-    constructor(props: ButtonProps) {
-        super('button', {
-            type: 'button',
-            uiType: 'primary',
-            disabled: false,
-            ...props,
-        });
-    }
+  constructor(props: ButtonProps) {
+    super('button', {
+      type: 'button',
+      uiType: 'primary',
+      disabled: false,
+      ...props,
+    });
+  }
 
-    init() {
-        if (this.getProps('events')?.onClick) {
-            const { onClick } = this.getProps('events');
-            this.setProps({ events: { click: (e: Event) => onClick(e) } });
-        }
+  init() {
+    if (this.getProps('events')?.onClick) {
+      const {onClick} = this.getProps('events');
+      this.setProps({events: {click: (e: Event) => onClick(e)}});
     }
+  }
 
-    render() {
-        return this.compile({
-            template: buttonTmpl,
-            context: this.props,
-        });
-    }
+  render() {
+    return this.compile({
+      template: buttonTmpl,
+      context: this.props,
+    });
+  }
 }
 
 export default Button;

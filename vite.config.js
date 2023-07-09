@@ -16,9 +16,9 @@ export default defineConfig({
          format: 'es',
          strict: false,
          dir: 'dist/',
-         entryFileNames: `assets/[name].js`,
-         chunkFileNames: `assets/[name].js`,
-         assetFileNames: `assets/[name].[ext]`,
+         entryFileNames: 'assets/[name].js',
+         chunkFileNames: 'assets/[name].js',
+         assetFileNames: 'assets/[name].[ext]',
        }
     }
   },
@@ -26,7 +26,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         quietDeps: true,
-        additionalData: `// @use "./src/scss/index.scss" as *;`
+        additionalData: '// @use "./src/scss/index.scss" as *;'
       }
     }
   }

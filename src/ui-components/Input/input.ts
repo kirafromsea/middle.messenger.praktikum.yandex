@@ -1,5 +1,5 @@
-import Block from '../../classes/Block.ts';
-import inputTmpl from './input.tmpl.ts';
+import Block from '../../classes/Block';
+import inputTmpl from './input.tmpl';
 
 interface InputProps {
     name: string;
@@ -15,59 +15,59 @@ interface InputProps {
 }
 
 class Input extends Block {
-    constructor(props: InputProps) {
-        super('input', {
-            regExpValidate: null,
-            events: {},
-            required: false,
-            errorMessage: null,
-            ...props,
-        });
+  constructor(props: InputProps) {
+    super('input', {
+      regExpValidate: null,
+      events: {},
+      required: false,
+      errorMessage: null,
+      ...props,
+    });
+  }
+
+  init() {
+    this.setProps({
+      events: {
+        change: (e: Event) => {
+          this.setValue(e.target.value);
+          this.validate();
+        },
+      },
+    });
+  }
+
+  validate() {
+    const value = this.getValue().trim() || '';
+    if (this.getProps('required') && (!value || value === '')) {
+      this.setProps({errorMessage: 'Not required'});
+    } else if (this.getProps('regExpValidate')) {
+      const valid = this.getProps('regExpValidate').test(value);
+      this.setProps({errorMessage: !valid ? 'Incorrect value' : null});
+    } else {
+      this.setProps({errorMessage: null});
     }
 
-    init() {
-        this.setProps({
-            events: {
-                change: (e: Event) => {
-                    this.setValue(e.target.value);
-                    this.validate();
-                },
-            },
-        });
-    }
+    return {
+      name: this.getProps('name'),
+      value: this.getProps('value'),
+      errorMessage: this.getProps('errorMessage'),
+    };
+  }
 
-    validate() {
-        const value = this.getValue().trim() || '';
-        if (this.getProps('required') && (!value || value === '')) {
-            this.setProps({ errorMessage: 'Not required' });
-        } else if (this.getProps('regExpValidate')) {
-            const valid = this.getProps('regExpValidate').test(value);
-            this.setProps({ errorMessage: !valid ? 'Incorrect value' : null });
-        } else {
-            this.setProps({ errorMessage: null });
-        }
+  public setValue(value: string) {
+    this.setProps({value});
+  }
 
-        return {
-            name: this.getProps('name'),
-            value: this.getProps('value'),
-            errorMessage: this.getProps('errorMessage'),
-        };
-    }
+  public getValue() {
+    return (this.getContent().getElementsByTagName('input'))[0].value;
+  }
 
-    public setValue(value: string) {
-        this.setProps({ value });
-    }
-
-    public getValue() {
-        return (this.getContent().getElementsByTagName('input'))[0].value;
-    }
-
-    render() {
-        return this.compile({
-            template: inputTmpl,
-            context: this.props,
-        });
-    }
+  render() {
+    return this.compile({
+      template: inputTmpl,
+      context: this.props,
+    });
+  }
 }
 
 export default Input;

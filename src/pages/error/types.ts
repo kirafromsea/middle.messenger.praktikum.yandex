@@ -1,4 +1,4 @@
-import errors from './errorsList.ts';
+import errors from './errorsList';
 
 type KeysOf<T extends { [key: string]: string }> = { [P in keyof T]: string };
 

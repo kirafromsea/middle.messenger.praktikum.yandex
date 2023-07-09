@@ -30,8 +30,10 @@
     "max-len": [2, 200],
     "import/no-unresolved": "off",
     "import/extensions": "off",
-    "indent": ["error", 4],
-    "linebreak-style": ["error", "windows"],
+    "quotes": ["error", "single"],
+    "arrow-parens": ["error", "always"],
+    "object-curly-spacing": ["error", "never"],
+    "no-case-declarations": "error",
     "no-multiple-empty-lines": [
       "error",
       {
@@ -41,9 +43,5 @@
       }
     ],
     "@typescript-eslint/no-unused-vars": 2
-  },
-  "import/no-extraneous-dependencies": [
-    "error",
-    { "devDependencies": true }
-  ]
+  }
 }
