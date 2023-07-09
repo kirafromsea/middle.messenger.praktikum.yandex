@@ -1,7 +1,7 @@
 import Block from '../../classes/Block';
 import inputTmpl from './input.tmpl';
 
-interface InputProps {
+export interface InputProps {
     name: string;
     type: string;
     value?: string;

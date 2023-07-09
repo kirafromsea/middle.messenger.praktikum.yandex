@@ -22,18 +22,8 @@ class ProfilePage extends Block {
     }
 
     const profileFormInput = controlsProfile.map((item) => new Input({
-      name: 'search',
-      type: 'text',
-      value: profile[item.name as string] as string,
-      description: '',
-      placeholder: 'User name',
-      required: false,
-      regExpValidate: null,
-      events: {
-        change: (e?: Event) => {
-          console.log('= search user ', e);
-        },
-      },
+      ...item,
+      value: profile[item.name as string] as string
     }));
 
     const buttonsProfile = profileFormButtons.map((item) => new Button({...item}));
