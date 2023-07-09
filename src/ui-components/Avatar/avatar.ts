@@ -11,8 +11,6 @@ class Avatar extends Block {
         });
     }
 
-    init() {}
-
     render() {
         return this.compile({
             template: avatarTmpl,

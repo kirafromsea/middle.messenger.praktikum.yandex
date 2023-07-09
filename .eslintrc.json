@@ -14,29 +14,24 @@
   },
   "rules": {
     "no-console": "off",
-    "no-unused-vars": "off",
-    
-
-    "max-params": [2, 3],
-    "prettier/prettier": [
+    "class-methods-use-this": "off",
+    "no-param-reassign": 0,
+    "no-use-before-define": [
       "error",
       {
-        "singleQuote": true,
-        "endOfLine": "off"
+        "functions": false,
+        "classes": false,
+        "variables": false,
+        "allowNamedExports": false
       }
     ],
-    
-    "no-param-reassign": 0,
     "no-underscore-dangle": 0,
     "default-param-last": 0,
-    "max-len": [
-      2,
-      200
-    ],
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
+    "max-len": [2, 200],
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "indent": ["error", 4],
+    "linebreak-style": ["error", "windows"],
     "no-multiple-empty-lines": [
       "error",
       {

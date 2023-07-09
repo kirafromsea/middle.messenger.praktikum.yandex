@@ -1,4 +1,4 @@
-import {ButtonProps} from "../../ui-components/Button/button.ts";
+import { ButtonProps } from '../../ui-components/Button/button.ts';
 
 export const profileFormButtons: ButtonProps[] = [
     {
@@ -12,7 +12,7 @@ export const profileFormButtons: ButtonProps[] = [
                 // добавить вывод "все успешно сохранено"
             },
         },
-    }
+    },
 ];
 
 export const passwordFormButtons: ButtonProps[] = [
@@ -27,5 +27,5 @@ export const passwordFormButtons: ButtonProps[] = [
                 // добавить вывод "все успешно сохранено"
             },
         },
-    }
+    },
 ];

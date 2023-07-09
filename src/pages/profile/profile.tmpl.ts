@@ -10,4 +10,3 @@ const profileTmpl = `
 `;
 
 export default profileTmpl;
-
