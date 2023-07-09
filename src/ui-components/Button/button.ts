@@ -25,7 +25,7 @@ class Button extends Block {
     init() {
         if (this.getProps('events')?.onClick) {
             const { onClick } = this.getProps('events');
-            this.setProps({ events: { click: (e) => onClick(e) } });
+            this.setProps({ events: { click: (e: Event) => onClick(e) } });
         }
     }
 

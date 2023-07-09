@@ -22,7 +22,7 @@ export const passwordFormButtons: ButtonProps[] = [
         type: 'submit',
         disabled: false,
         events: {
-            onClick: (e) => {
+            onClick: (e: Event) => {
                 console.log('Save new password', e);
                 // добавить вывод "все успешно сохранено"
             },

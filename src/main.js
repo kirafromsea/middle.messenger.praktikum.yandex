@@ -3,9 +3,7 @@ import RegistrationPage from './pages/registration/registration.ts';
 import ChatPage from './pages/chat/chat.ts';
 import ErrorPage from './pages/error/error.ts';
 import ProfilePage from './pages/profile/profile.ts';
-import chatInfo from '../public/chats.js';
 
-const chatPeople = chatInfo.chats.map(item => item.username);
 const DEFAULT_ERROR = 404;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return new ProfilePage();
       case 'error':
       default:
-        //const activeError = pathWay.length === 2 ? pathWay[1] : null;
-        return new ErrorPage();
+        const activeError = pathWay.length === 2 ? pathWay[1] : DEFAULT_ERROR;
+        return new ErrorPage({errorCode: activeError});
     }
   };
 

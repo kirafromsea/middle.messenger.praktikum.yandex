@@ -8,12 +8,13 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "strict": false,
-    "noUnusedParameters": false,
+    "noUnusedParameters": true,
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "moduleResolution": "Node"
   },
   "include": ["src"]
 }

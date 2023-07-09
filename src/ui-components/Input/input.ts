@@ -28,7 +28,7 @@ class Input extends Block {
     init() {
         this.setProps({
             events: {
-                change: (e) => {
+                change: (e: Event) => {
                     this.setValue(e.target.value);
                     this.validate();
                 },
