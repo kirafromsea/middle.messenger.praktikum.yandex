@@ -18,11 +18,12 @@ class Block<T extends object = {}> {
 
     public id: string | null = null; // уникальный id для каждого блока на странице
 
+    // eslint-disable-next-line no-use-before-define
     public children: Record<string, Block | Block[]>; // потомки в элементе
 
     public tagName: string;
 
-    public events: { [key: string]: HTMLElement } | any; // события
+    public events?: { [key: string]: HTMLElement } | any; // события
 
     /** JSDoc
      * @param {string} tagName
@@ -31,7 +32,7 @@ class Block<T extends object = {}> {
      * @returns {void}
      */
     constructor(tagName: string, initProps: T) {
-        // конструктор - здесь собираем всё необходимое для дайльнейшей работы
+    // конструктор - здесь собираем всё необходимое для дайльнейшей работы
         const eventBus = new EventBus();
 
         const { props, children } = this._getChildren(initProps);
@@ -58,7 +59,7 @@ class Block<T extends object = {}> {
             if (Array.isArray(value) && value.length > 0 && value.every((v) => v instanceof Block)) {
                 children[key as string] = value;
             } else if (value instanceof Block) {
-                children[key as string] = value; // TODO типы
+                children[key as string] = value;
             } else {
                 props[key] = value;
             }
@@ -68,13 +69,13 @@ class Block<T extends object = {}> {
     }
 
     private _init() {
-        // инициализация
+    // инициализация
         this.init();
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
 
     private _registerEvents(eventBus: EventBus) {
-        // регистрируем все доступные события
+    // регистрируем все доступные события
         eventBus.on(Block.EVENTS.INIT, this._init.bind(this));
         eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
         eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
@@ -82,21 +83,19 @@ class Block<T extends object = {}> {
     }
 
     private _componentDidMount() {
-        // то что должно происходить при монтировании элемента
+    // то что должно происходить при монтировании элемента
         this.componentDidMount();
     }
 
     private _componentDidUpdate(oldProps: T, newProps: T) {
-        // то чот происходит при обновлении пропсов
-        console.log('=component update', oldProps, newProps);
-
+    // то чот происходит при обновлении пропсов
         const response = this.componentDidUpdate(oldProps, newProps);
         if (!response) return;
         this._render();
     }
 
     private _makeProxyProps(props: T) {
-        // правила для работы с пропсами создание/изменение/удаление
+    // правила для работы с пропсами создание/изменение/удаление
         const self = this;
 
         return new Proxy(props, {
@@ -122,8 +121,8 @@ class Block<T extends object = {}> {
     }
 
     private _addEvents() {
-        // добавление событий. Необходимо занести их в events и навесить слушатели событий
-        const { events = {} } = this.props;
+    // добавление событий. Необходимо занести их в events и навесить слушатели событий
+        const events = this.getProps('events');
         if (!events || !this._element) {
             return;
         }
@@ -134,8 +133,8 @@ class Block<T extends object = {}> {
     }
 
     private _removeEvents() {
-        // в случае удаления событий, необходимо убрать слушатели
-        const { events = {} } = this.props;
+    // в случае удаления событий, необходимо убрать слушатели
+        const events = this.getProps('events');
 
         if (!events || !this._element) {
             return;
@@ -146,39 +145,33 @@ class Block<T extends object = {}> {
         });
     }
 
-    public compile({ template, context }): DocumentFragment {
-        const contextAndDummies = { ...context };
-
+    public compile({ template, context = {} }): DocumentFragment {
         Object.entries(this.children).forEach(([name, component]) => {
             if (Array.isArray(component)) {
-                contextAndDummies[name] = component.map((child) => `<div data-id="${child.id}"></div>`);
+                context[name] = component.map((child) => `<div data-id="${child.id}"></div>`);
             } else {
-                contextAndDummies[name] = `<div data-id="${component.id}"></div>`;
+                context[name] = `<div data-id="${component.id}"></div>`;
             }
         });
 
-        const html = Handlebars.compile(template)(contextAndDummies);
+        const html = Handlebars.compile(template)(context);
 
         const temp = document.createElement('template');
         temp.innerHTML = html;
 
-        /**
-         * @description Replaces a dummy element with a real one, storing all childNodes in the component
-         *
-         * @param {Block} component (handlebars)
-         * */
-        const replaceDummy = (component: Block) => {
-            const dummy = temp.content.querySelector(`[data-id="${component.id}"]`);
-            if (!dummy) return;
-            component.getContent()?.append(...Array.from(dummy.childNodes));
-            dummy.replaceWith(component.getContent()!);
+        const replacePlug = (component: Block) => {
+            const plug = temp.content.querySelector(`[data-id="${component.id}"]`);
+            if (!plug) return;
+            component.getContent()?.append(...Array.from(plug.childNodes));
+            plug.replaceWith(component.getContent()!);
         };
 
-        Object.entries(this.children).forEach(([_, component]) => {
+        Object.entries(this.children).forEach((item) => {
+            const component = item[1];
             if (Array.isArray(component)) {
-                component.forEach((comp) => replaceDummy(comp));
+                component.forEach((comp) => replacePlug(comp));
             } else {
-                replaceDummy(component);
+                replacePlug(component);
             }
         });
 
@@ -186,8 +179,7 @@ class Block<T extends object = {}> {
     }
 
     private _render() {
-        // рендер элемента
-        console.log('=render');
+    // рендер элемента
         const fragment = this.render();
 
         const newElement = fragment.firstElementChild as HTMLElement;
@@ -212,7 +204,8 @@ class Block<T extends object = {}> {
 
     public componentDidMount() {} // может быть переопределено пользователем
 
-    public componentDidUpdate(oldProps: T, newProps: T) { return true; } // может быть переопределено пользователем
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    public componentDidUpdate(oldProps: T, newProps: T) { return true; }
 
     public dispatchComponentDidMount() {
         this.eventBus().emit(Block.EVENTS.FLOW_CDM);
@@ -227,27 +220,21 @@ class Block<T extends object = {}> {
     }
 
     public setProps(nextProps: T) {
-        // изменение пропсов
+    // изменение пропсов
         if (!nextProps) {
             return;
         }
-        const oldProps = {...this.props};
+        const oldProps = { ...this.props };
         Object.assign(this.props, nextProps);
         this._componentDidUpdate(oldProps, this.props);
     }
 
-    getProps = (key: string) =>
-        // прлучение значения одного пропса
-        this.props[key];
-
-
-    get element() {
-        // получение самого элемента
-        return this._element;
+    public getProps(key: string) {
+        return this.props[key];
     }
 
     public getContent(): HTMLElement {
-        // получение контента
+    // получение контента
         return this._element;
     }
 

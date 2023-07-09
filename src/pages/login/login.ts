@@ -1,7 +1,8 @@
 import Block from '../../classes/Block.ts';
 import Form from '../../ui-components/Form/form.ts';
 import Input from '../../ui-components/Input/input.ts';
-import Button, {ButtonProps} from '../../ui-components/Button/button.ts';
+import { USERNAME_REGEXP } from '../../utils/validationRegexp.ts';
+import Button, { ButtonProps } from '../../ui-components/Button/button.ts';
 import loginTmpl from './login.tmpl.ts';
 
 const controlsData = [
@@ -11,7 +12,7 @@ const controlsData = [
         value: '',
         placeholder: 'Username',
         required: true,
-        regExpValidate: /^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/,
+        regExpValidate: USERNAME_REGEXP,
         description: '', // добавить аннотацию для допустимых символов
     },
     {

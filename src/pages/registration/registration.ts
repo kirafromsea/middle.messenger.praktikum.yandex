@@ -1,15 +1,15 @@
 import Block from '../../classes/Block.ts';
 import registrationTmpl from './registration.tmpl.ts';
-import Button, {ButtonProps} from "../../ui-components/Button/button.ts";
-import Input from "../../ui-components/Input/input.ts";
-import Form from "../../ui-components/Form/form.ts";
+import Button, { ButtonProps } from '../../ui-components/Button/button.ts';
+import Input from '../../ui-components/Input/input.ts';
+import Form from '../../ui-components/Form/form.ts';
 import {
     EMAIL_REGEXP,
     NAME_REGEXP,
     PASSWORD_REGEXP,
     PHONE_REGEXP,
-    USERNAME_REGEXP
-} from "../../utils/validationRegexp.ts";
+    USERNAME_REGEXP,
+} from '../../utils/validationRegexp.ts';
 
 const controlsData = [
     {
@@ -54,7 +54,7 @@ const controlsData = [
         placeholder: 'Phone',
         required: true,
         regExpValidate: PHONE_REGEXP,
-        description: ''
+        description: '',
     },
     {
         name: 'password',
@@ -62,8 +62,8 @@ const controlsData = [
         placeholder: 'New password',
         required: true,
         regExpValidate: PASSWORD_REGEXP,
-        description: ''
-    }
+        description: '',
+    },
 ];
 
 const buttonsData: ButtonProps[] = [
@@ -104,8 +104,8 @@ class RegistrationPage extends Block {
 
         this.children.signupForm = new Form({
             title: 'Sign Up',
-            controls: controls,
-            buttons: buttons,
+            controls,
+            buttons,
             formClassName: 'auth-form',
         });
     }
@@ -117,4 +117,3 @@ class RegistrationPage extends Block {
 }
 
 export default RegistrationPage;
-

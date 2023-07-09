@@ -18,7 +18,7 @@ const ErrorPage = ({ errorCode }: ErrorProps) => {
     return Handlebars.compile(errorTmpl)({
         errorNumber: errorCode,
         errorMessage: errors[errorIndex] || defaultErrorMessage,
-        // button: indexPageButton,
+    // button: indexPageButton,
     });
 };
 

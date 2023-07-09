@@ -1,6 +1,9 @@
 // TODO для инпутов добавить заголовок и description в form-field
 // В следующей итерации сделеть переиспользование полей для разных форм
-import {NAME_REGEXP, PASSWORD_REGEXP, EMAIL_REGEXP, PHONE_REGEXP, USERNAME_REGEXP} from '../../utils/validationRegexp.ts';
+import {
+    NAME_REGEXP, PASSWORD_REGEXP, EMAIL_REGEXP, PHONE_REGEXP, USERNAME_REGEXP,
+} from '../../utils/validationRegexp.ts';
+
 export const controlsProfile = [
     {
         name: 'first_name',
@@ -52,8 +55,8 @@ export const controlsProfile = [
         placeholder: 'Phone',
         required: true,
         regExpValidate: PHONE_REGEXP,
-        description: ''
-    }
+        description: '',
+    },
 ];
 
 export const controlsPassword = [
@@ -63,7 +66,7 @@ export const controlsPassword = [
         placeholder: 'Old password',
         required: true,
         regExpValidate: PASSWORD_REGEXP,
-        description: ''
+        description: '',
     },
     {
         name: 'newPassword',
@@ -71,6 +74,6 @@ export const controlsPassword = [
         placeholder: 'New password',
         required: true,
         regExpValidate: PASSWORD_REGEXP,
-        description: ''
-    }
+        description: '',
+    },
 ];
