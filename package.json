@@ -11,14 +11,26 @@
     "build": "vite build",
     "preview": "vite preview --port 8080",
     "start": "vite build; vite preview --port 3000",
-    "start:server": "node ./server/server.js "
+    "start:server": "node ./server/server.js ",
+    "typescript": "tsc --noEmit",
+    "lint": "eslint . --ext .ts --fix",
+    "stylelint": "stylelint src/scss/*.* --fix"
   },
   "devDependencies": {
-    "express": "^4.18.2",
+    "@types/uuid": "^9.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.43.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "stylelint": "^15.10.1",
+    "stylelint-config-standard-scss": "^10.0.0",
+    "typescript": "^5.1.6",
     "vite": "^4.3.9"
   },
   "dependencies": {
     "handlebars": "^4.7.7",
-    "sass": "^1.63.4"
+    "express": "^4.18.2",
+    "sass": "^1.63.4",
+    "uuid": "^9.0.0"
   }
 }

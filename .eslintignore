@@ -1,0 +1,6 @@
+/dist
+/node_modules
+/src/classes/HTTPTransport.ts
+/public
+/server
+vite.config.js
