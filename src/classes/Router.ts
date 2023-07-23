@@ -45,17 +45,23 @@ class Router {
   }
 
   _onRoute(pathname: string): void {
+    const getPathname = this.getRoute(pathname);
     if (Store.getState().auth) {
       if (pathname === Paths.Index || pathname === Paths.SignUp) {
         pathname = Paths.Chat;
         this.history.pushState({}, '', Paths.Chat);
       }
-    } else if (pathname !== Paths.Index && pathname !== Paths.SignUp) {
+    } else if (getPathname && pathname !== Paths.Index && pathname !== Paths.SignUp) {
       pathname = Paths.Index;
       this.history.pushState({}, '', Paths.Index);
     }
+    const route: Route | undefined = getPathname ?? this.getRoute(Paths.Error);
 
-    const route: Route | undefined = this.getRoute(pathname) ?? this.getRoute(Paths.Error);
+    if (!getPathname) {
+      Store.set('error', 404);
+      console.log('=add error in store', Store);
+    }
+
     if (!route) {
       return;
     }

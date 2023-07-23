@@ -5,6 +5,24 @@ export const authApi = {
   logout: '/logout',
 };
 
-export const chatApi = {};
+export const chatApi = {
+  chats: '/chats', // get - получить чаты текущего пользователя; put - создать чаты текущего пользователя; delete - удалить чат по его ID
+  users: '/chats/:id/users', // get - получить пользователей чата по ID;
+  newMessages: '/chats/new/:id', // get - получить количество новых сообщений в указанном чате;
+  chatAvatar: '/chats/avatar', // put - загрузить аватар чата (через multipart/form-data);
+  addUser: '/chats/users', // put - добавить пользователя в чат; delete - удалить пользователей из чата.
+};
 
-export const profileApi = {};
+export const profileApi = {
+  changeProfile: '/profile', // изменить текстовые данные текущего пользователя;
+  avatar: '/profile/avatar', // обновить аватар текущего пользователя (через multipart/form-data)
+  password: '/password', // изменить пароль текущего пользователя;
+  userInfo: '/:id', // получить информацию о пользователе по ID (можно использовать, например, для отображения аватаров и логинов в чате);
+  search: '/search', // поиск пользователей в системе (возвращается максимально 10 человек).
+};
+
+export const headersJson = {
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8',
+  },
+};

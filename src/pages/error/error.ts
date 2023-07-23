@@ -1,10 +1,12 @@
 import Block from '../../classes/Block';
+import Store from '../../classes/Store';
 import errorTmpl from './error.tmpl';
 import errors, {defaultErrorMessage} from './errorsList';
 
 class ErrorPage extends Block {
   constructor() {
-    const props = {errorCode: 400};
+    console.log('=store', Store);
+    const props = {errorCode: 404};
     const errorIndex = `error_${props.errorCode}`;
     super('div', {
       errorNumber: props.errorCode,

@@ -2,7 +2,8 @@ import Router from '../classes/Router';
 import Store from '../classes/Store';
 import {Paths} from '../utils/constants';
 
-import {AuthAPI, LoginDataType, SignupDataType} from '../api-services/AuthAPI';
+import AuthAPI from '../api-services/AuthAPI';
+import {LoginDataType, SignupDataType} from '../api-services/types';
 
 class AuthController {
   public router: typeof Router = Router;

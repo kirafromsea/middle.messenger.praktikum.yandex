@@ -11,6 +11,7 @@ export type StoreState = {
     isLoading: false,
     getPage: string,
     chats: ChatType[],
+    error: null | number,
     currentChat: {
         isLoading: boolean,
         isLoadingOldMsg: boolean,
@@ -26,6 +27,7 @@ const initialStoreState: StoreState = {
   isLoading: false,
   getPage: '/',
   chats: [],
+  error: null,
   currentChat: {
     isLoading: false,
     isLoadingOldMsg: false,
@@ -43,6 +45,7 @@ class Store extends EventBus {
 
   public set(path: string, value: unknown): void {
     try {
+      console.log('=store set', value, path);
       set(this.state, path, value);
       this.emit(storeEventsUpdated);
     } catch (e) {

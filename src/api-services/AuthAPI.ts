@@ -1,20 +1,7 @@
 import HTTPTransport from './HTTPTransport';
 import {baseUrl} from '../config';
 import {authApi} from './api-urls';
-
-export type SignupDataType = {
-    email: string,
-    login: string,
-    first_name: string,
-    second_name: string,
-    phone: string,
-    password: string,
-};
-
-export type LoginDataType = {
-    login: string,
-    password: string,
-};
+import {SignupDataType, LoginDataType} from './types';
 
 class AuthAPIClass {
   public http = new HTTPTransport(`${baseUrl}/auth`);
@@ -59,4 +46,6 @@ class AuthAPIClass {
   }
 }
 
-export const AuthAPI = new AuthAPIClass();
+const AuthAPI = new AuthAPIClass();
+
+export default AuthAPI;

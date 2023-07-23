@@ -42,6 +42,7 @@ export const set = (object: Indexed | unknown, path: string, value: unknown): In
   const result = path.split('.').reduceRight<Indexed>((acc, key) => ({
     [key]: acc,
   }), value as any);
+  console.log('=set object result', result);
 
   return merge(object as Indexed, result);
 };
