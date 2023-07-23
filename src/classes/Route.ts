@@ -18,8 +18,11 @@ export interface IRoute {
 
 class Route {
   private _pathname: string;
+
   private _blockClass: typeof Block | null;
+
   private _block: Block | null;
+
   private _props: Record<string, string>;
 
   constructor(pathname: string, view: typeof Block, props: Record<string, string>) {
@@ -34,17 +37,17 @@ class Route {
       this._pathname = pathname;
       this.render();
     }
-  };
+  }
 
   leave() {
     if (this._block) {
       this._block.hide();
     }
-  };
+  }
 
   match(pathname: string): boolean {
     return pathname === this._pathname;
-  };
+  }
 
   render() {
     if (!this._blockClass) {
@@ -58,7 +61,7 @@ class Route {
       root.append(this._block.getContent() || '');
     }
     Store.set('', '');
-  };
+  }
 }
 
 export default Route;

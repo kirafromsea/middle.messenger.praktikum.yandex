@@ -5,8 +5,9 @@ import Input from '../../ui-components/Input/input';
 import Form from '../../ui-components/Form/form';
 import {ChatItem} from '../../ui-components/index';
 import MessageItem from '../../ui-components/MessageItem/messageItem';
-import {MESSAGE_TYPE_SELF} from '../../utils/constants';
+import {MESSAGE_TYPE_SELF, Paths} from '../../utils/constants';
 import chatTmpl from './chat.tmpl';
+import AuthController from '../../controllers/AuthController';
 
 class ChatPage extends Block {
   constructor() {
@@ -45,8 +46,17 @@ class ChatPage extends Block {
       type: 'button',
       events: {
         onClick: () => {
-          window.location.href = '/profile';
+          window.location.href = Paths.Settings;
         },
+      },
+    });
+
+    this.children.logoutButton = new Button({
+      title: 'Logout',
+      uiType: 'third',
+      type: 'button',
+      events: {
+        onClick: AuthController.logout.bind(AuthController),
       },
     });
 

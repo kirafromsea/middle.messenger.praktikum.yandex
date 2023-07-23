@@ -9,7 +9,10 @@ const chatTmpl = `
             {{/each}}
           </ul>
         </div>
-        <div class="chat-bottom">{{{profileButton}}}</div>
+        <div class="chat-bottom">
+            {{{profileButton}}}
+            {{{logoutButton}}}
+        </div>
     </div>
     <div class="chat-right">
         <div class="chat-right">

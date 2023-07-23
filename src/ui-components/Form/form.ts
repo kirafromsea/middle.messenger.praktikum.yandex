@@ -8,11 +8,15 @@ type FormProps = {
     controls: Input[];
     buttons: Block[];
     formClassName: string;
+    controller?: Function;
 };
 
 class Form extends Block {
+  controller: null | Function;
+
   constructor({...props}: FormProps) {
     super('form', {title: '', isValid: true, ...props});
+    if (props.controller) this.controller = props.controller;
   }
 
   init() {
@@ -77,6 +81,7 @@ class Form extends Block {
     }
 
     console.log('Data form is valid. Go to next page');
+    if (this.controller) this.controller(dataForm);
     return true;
   }
 

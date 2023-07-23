@@ -8,6 +8,7 @@ import Button from '../../ui-components/Button/button';
 import Form from '../../ui-components/Form/form';
 import {controlsPassword, controlsProfile} from './controlsInputSettings';
 import {passwordFormButtons, profileFormButtons} from './buttonsSettings';
+import {Paths} from '../../utils/constants';
 
 class ProfilePage extends Block {
   constructor() {
@@ -53,7 +54,7 @@ class ProfilePage extends Block {
       type: 'button',
       events: {
         onClick: () => {
-          window.location.href = '/chat';
+          window.location.href = Paths.Chat;
         },
       },
     });

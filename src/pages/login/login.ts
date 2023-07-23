@@ -1,7 +1,9 @@
 import Block from '../../classes/Block';
+import AuthController from '../../controllers/AuthController';
 import Form from '../../ui-components/Form/form';
 import Input from '../../ui-components/Input/input';
 import {USERNAME_REGEXP} from '../../utils/validationRegexp';
+import {Paths} from '../../utils/constants';
 import Button, {ButtonProps} from '../../ui-components/Button/button';
 import loginTmpl from './login.tmpl';
 
@@ -31,7 +33,7 @@ const buttonsData: ButtonProps[] = [
     disabled: false,
     events: {
       onClick: () => {
-        window.location.href = '/chat';
+        // window.location.href = Paths.Chat;
       },
     },
   },
@@ -46,7 +48,7 @@ const buttonsData: ButtonProps[] = [
           return;
         }
         e.preventDefault();
-        window.location.href = '/signup';
+        window.location.href = Paths.SignUp;
       },
     },
   },
@@ -66,6 +68,7 @@ class LoginPage extends Block {
       title: 'Log In',
       controls,
       buttons,
+      controller: AuthController.login.bind(AuthController),
       formClassName: 'auth-form',
     });
   }

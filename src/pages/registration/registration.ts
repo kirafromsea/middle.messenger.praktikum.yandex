@@ -3,6 +3,7 @@ import registrationTmpl from './registration.tmpl';
 import Button, {ButtonProps} from '../../ui-components/Button/button';
 import Input from '../../ui-components/Input/input';
 import Form from '../../ui-components/Form/form';
+import AuthController from '../../controllers/AuthController';
 import {
   EMAIL_REGEXP,
   NAME_REGEXP,
@@ -10,6 +11,7 @@ import {
   PHONE_REGEXP,
   USERNAME_REGEXP,
 } from '../../utils/validationRegexp';
+import {Paths} from '../../utils/constants';
 
 const controlsData = [
   {
@@ -74,7 +76,7 @@ const buttonsData: ButtonProps[] = [
     disabled: false,
     events: {
       onClick: () => {
-        window.location.href = '/chat';
+        // window.location.href = Paths.Chat;
       },
     },
   },
@@ -86,7 +88,7 @@ const buttonsData: ButtonProps[] = [
     events: {
       onClick: (e?: Event) => {
         e?.preventDefault();
-        window.location.href = '/login';
+        window.location.href = Paths.Index;
       },
     },
   },
@@ -106,12 +108,12 @@ class RegistrationPage extends Block {
       title: 'Sign Up',
       controls,
       buttons,
+      controller: AuthController.signup.bind(AuthController),
       formClassName: 'auth-form',
     });
   }
 
   render() {
-    console.log('=signup render', registrationTmpl, this.props);
     return this.compile({template: registrationTmpl, context: {...this.props}});
   }
 }

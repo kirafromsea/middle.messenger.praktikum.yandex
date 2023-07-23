@@ -1,9 +1,7 @@
 import {set} from '../utils/object';
 import EventBus from './EventBus';
 
-export enum StoreEvents {
-    Updated = 'updated'
-}
+const storeEventsUpdated = 'updated';
 
 export type ChatType = Record<string, number | string | unknown>
 
@@ -23,42 +21,42 @@ export type StoreState = {
 };
 
 const initialStoreState: StoreState = {
-    auth: false,
-    user: null,
+  auth: false, // TODO заглушка пока не будет сделана авторизация
+  user: null,
+  isLoading: false,
+  getPage: '/',
+  chats: [],
+  currentChat: {
     isLoading: false,
-    getPage: '/',
-    chats: [],
-    currentChat: {
-        isLoading: false,
-        isLoadingOldMsg: false,
-        scroll: 0,
-        chat: null,
-        messages: null,
-    }
-}
+    isLoadingOldMsg: false,
+    scroll: 0,
+    chat: null,
+    messages: null,
+  },
+};
 class Store extends EventBus {
-    private state = initialStoreState;
+  private state = initialStoreState;
 
-    public getState(): StoreState {
-        return this.state;
-    }
+  public getState(): StoreState {
+    return this.state;
+  }
 
-    public set(path: string, value: unknown): void {
-        try {
-            set(this.state, path, value);
-            this.emit(StoreEvents.Updated);
-        } catch (e) {
-            console.log(e);
-        }
+  public set(path: string, value: unknown): void {
+    try {
+      set(this.state, path, value);
+      this.emit(storeEventsUpdated);
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    public setResetState(): void {
-        try {
-            this.state = initialStoreState;
-            this.emit(StoreEvents.Updated);
-        } catch (e) {
-            console.log(e);
-        }
+  public setResetState(): void {
+    try {
+      this.state = initialStoreState;
+      this.emit(storeEventsUpdated);
+    } catch (error) {
+      console.log('=setResetStore catch', error);
     }
+  }
 }
 export default new Store();
