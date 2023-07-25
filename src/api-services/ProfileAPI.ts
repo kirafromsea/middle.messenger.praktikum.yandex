@@ -7,9 +7,10 @@ class ProfileAPIClass {
   public http = new HTTPTransport(`${baseUrl}/user`);
 
   /** Для получения профиля владельца чата */
-  getUserInfo(id: number): Promise<any> {
+  getProfile(id: number): Promise<any> {
+    const url = profileApi.userInfo.replace(':id', `${id}`);
     return this.http.get({
-      url: profileApi.userInfo.replace(':id', `${id}`),
+      url,
       options: {...headersJson},
     });
   }

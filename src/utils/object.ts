@@ -16,17 +16,16 @@ function isArrayOrObject(value: unknown): value is [] | Indexed {
 }
 
 export const merge = (left: Indexed, right: Indexed): Indexed => {
-  Object.keys(left).forEach((key) => {
-    const item = left[key];
+  Object.keys(right).forEach((key) => {
     if (right.hasOwnProperty(key)) {
       try {
-        if (right[item].constructor === Object) {
-          right[item] = merge(left[item] as Indexed, right[item] as Indexed);
+        if (left[key].constructor === Object) {
+          left[key] = merge(left[key] as Indexed, right[key] as Indexed);
         } else {
-          left[item] = right[item];
+          left[key] = right[key];
         }
       } catch (e) {
-        left[item] = right[item];
+        left[key] = right[key];
       }
     }
   });
@@ -38,11 +37,9 @@ export const set = (object: Indexed | unknown, path: string, value: unknown): In
   if (typeof object !== 'object' || object === null) {
     return object;
   }
-
   const result = path.split('.').reduceRight<Indexed>((acc, key) => ({
     [key]: acc,
   }), value as any);
-  console.log('=set object result', result);
 
   return merge(object as Indexed, result);
 };

@@ -59,7 +59,6 @@ class HTTPTransport {
 
     return new Promise((resolve, reject) => {
       let reqUrl = url;
-      console.log('=promise req data', data);
 
       if (method === METHODS.GET && !!data) {
         reqUrl = `${url}${queryStringify(data)}`;
@@ -88,7 +87,6 @@ class HTTPTransport {
         xhr.send();
       } else {
         const sendData = data instanceof FormData ? data : JSON.stringify(data);
-        console.log('=sendData', sendData);
         xhr.send(sendData);
       }
     });

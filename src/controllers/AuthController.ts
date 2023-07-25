@@ -11,13 +11,12 @@ class AuthController {
   public store: typeof Store = Store;
 
   public async login(data: LoginDataType) {
-    console.log('=this.store', this.store);
     try {
       this.store.set('isLoading', true);
+      this.store.set('error', null);
 
       const {status, response} = await AuthAPI.login(data);
       const reason = response && response !== 'OK' ? JSON.parse(response).reason : null;
-      console.log('=signup login', response);
 
       if (status === 200 || (status === 400 && reason === 'User already in system')) { // TODO вынести текст ошибки в константы
         this.store.set('auth', true);
@@ -25,7 +24,9 @@ class AuthController {
         this.router.go(Paths.Chat);
         this.store.set('isLoading', false);
       } else {
-        this.router.go(`${Paths.Error}/${status}`);
+        console.log('=login error', status, response);
+        this.store.set('error', {code: status, response});
+        //this.router.go(`${Paths.Error}/${status}`);
       }
     } catch (error) {
       console.log('=api login catch', error);
@@ -35,44 +36,49 @@ class AuthController {
   public async signup(data: SignupDataType): Promise<void> {
     try {
       this.store.set('isLoading', true);
+      this.store.set('error', null);
       const {status, response} = await AuthAPI.signup(data);
-      console.log('=signup response', JSON.parse(response).reason);
       if (status === 200) {
         await this.getUser();
         this.router.go(Paths.Chat);
       } else {
-        this.store.set('signupError', status);
+        this.store.set('error', {code: status, response});
       }
 
       this.store.set('isLoading', false);
     } catch (error) {
       console.log('=error', error);
+      // TODO сделать сохранение ошибок в store
     }
   }
 
   public async getUser(): Promise<boolean> {
     try {
+      this.store.set('error', null);
       const {status, response} = await AuthAPI.getUser();
       if (status === 200 && response) {
         this.store.set('user', JSON.parse(response));
         this.store.set('auth', true);
         return true;
+      } if (status >= 400) {
+        this.store.set('error', {code: status, response});
       }
       return false;
     } catch (error) {
-      console.log('=getUser error catch', error);
       return false;
     }
   }
 
   public async logout() {
     try {
-      const {status} = await AuthAPI.logout();
-      console.log('=logout', status);
+      this.store.set('error', null);
+      const {status, response} = await AuthAPI.logout();
       if (status === 200) {
         this.store.setResetState();
+        console.log('=logout store', this.store);
         this.router.go(Paths.Index);
       } else {
+        this.store.set('error', {code: status, response});
         this.router.go(`${Paths.Error}/${status}`);
       }
     } catch (e) {

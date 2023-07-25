@@ -1,17 +1,20 @@
 import chatInfo from '../../../public/chats';
 import {ChatsInfoType} from '../../types/chats';
 import Block from '../../classes/Block';
+import AuthController from '../../controllers/AuthController';
 import Avatar from '../../ui-components/Avatar/avatar';
-import profileTmpl from './profile.tmpl';
 import Input from '../../ui-components/Input/input';
 import Button from '../../ui-components/Button/button';
 import Form from '../../ui-components/Form/form';
 import {controlsPassword, controlsProfile} from './controlsInputSettings';
 import {passwordFormButtons, profileFormButtons} from './buttonsSettings';
 import {Paths} from '../../utils/constants';
+import profileTmpl from './profile.tmpl';
 
 class ProfilePage extends Block {
   constructor() {
+    const userInfo = AuthController.getUser();
+    console.log('=profile', userInfo);
     super('div', {});
   }
 

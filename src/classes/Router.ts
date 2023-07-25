@@ -10,6 +10,8 @@ class Router {
 
   public history: History;
 
+  public store: typeof Store = Store;
+
   private _currentRoute: Route | null;
 
   private _rootQuery: string;
@@ -45,21 +47,30 @@ class Router {
   }
 
   _onRoute(pathname: string): void {
-    const getPathname = this.getRoute(pathname);
-    if (Store.getState().auth) {
+    this.store.set('error', null);
+    let path = pathname;
+    if (this.store.getState().auth) {
       if (pathname === Paths.Index || pathname === Paths.SignUp) {
-        pathname = Paths.Chat;
+        path = Paths.Chat;
         this.history.pushState({}, '', Paths.Chat);
       }
-    } else if (getPathname && pathname !== Paths.Index && pathname !== Paths.SignUp) {
-      pathname = Paths.Index;
+    } else if (pathname !== Paths.Index && pathname !== Paths.SignUp) {
+      path = Paths.Index;
       this.history.pushState({}, '', Paths.Index);
     }
-    const route: Route | undefined = getPathname ?? this.getRoute(Paths.Error);
 
-    if (!getPathname) {
-      Store.set('error', 404);
-      console.log('=add error in store', Store);
+    /**
+     * Если изначальный адрес страницы был из существующих,
+     * то выводим нужный путь в зависимости от того была авторизация или нет.
+     * Если же изначлаьно указан ошибочный адрес, то открываем страницу с ошибкой.
+     *
+     * Если изначальный путь пустой, сохраняет в store ошибку с кодом 404
+     */
+    const checkPathname = this.getRoute(pathname);
+    const route: Route | undefined = checkPathname ? this.getRoute(path) : this.getRoute(Paths.Error);
+
+    if (!checkPathname) {
+      this.store.set('error', {code: 404});
     }
 
     if (!route) {
