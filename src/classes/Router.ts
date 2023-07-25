@@ -7,8 +7,8 @@ import {Paths} from '../utils/constants';
 
 class Router {
   public routes: Route[];
-
   public history: History;
+  public store: typeof Store = Store;
 
   private _currentRoute: Route | null;
 
@@ -45,21 +45,25 @@ class Router {
   }
 
   _onRoute(pathname: string): void {
+    this.store.set('error', null);
     const getPathname = this.getRoute(pathname);
-    if (Store.getState().auth) {
+    let route: Route | undefined;
+   // TODO добавить случай, когда напрямую зашли на страницу ошибки
+    if (this.store.getStateItem('auth')) {
       if (pathname === Paths.Index || pathname === Paths.SignUp) {
-        pathname = Paths.Chat;
+        route = this.getRoute(Paths.Chat);
         this.history.pushState({}, '', Paths.Chat);
       }
     } else if (getPathname && pathname !== Paths.Index && pathname !== Paths.SignUp) {
-      pathname = Paths.Index;
+      route = this.getRoute(Paths.Index);
       this.history.pushState({}, '', Paths.Index);
+    } else {
+      route = getPathname ?? this.getRoute(Paths.Error);
+      this.history.pushState({}, '', Paths.Error);
     }
-    const route: Route | undefined = getPathname ?? this.getRoute(Paths.Error);
 
     if (!getPathname) {
-      Store.set('error', 404);
-      console.log('=add error in store', Store);
+      this.store.set('error', {code: 404});
     }
 
     if (!route) {
