@@ -46,15 +46,15 @@ class HTTPTransport {
     this.baseUrl = baseUrl;
   }
 
-  get = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.GET}, timeout: options.timeout});
+  get = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.GET}, timeout: options?.timeout});
 
-  put = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.PUT}, timeout: options.timeout});
+  put = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.PUT}, timeout: options?.timeout});
 
-  post = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.POST}, timeout: options.timeout});
+  post = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.POST}, timeout: options?.timeout});
 
-  delete = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.DELETE}, timeout: options.timeout});
+  delete = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.DELETE}, timeout: options?.timeout});
 
-  request = ({url, options = {}, timeout = 5000}: QueryRequestType) => {
+  request = ({url, options = {}, timeout}: QueryRequestType) => {
     const {headers = {}, method = METHODS.GET, data} = options;
 
     return new Promise((resolve, reject) => {
@@ -80,13 +80,14 @@ class HTTPTransport {
       xhr.onabort = reject;
       xhr.onerror = reject;
 
-      xhr.timeout = timeout;
+      xhr.timeout = timeout || 5000;
       xhr.ontimeout = reject;
 
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
         const sendData = data instanceof FormData ? data : JSON.stringify(data);
+        console.log('=sendData',data.display_name, sendData);
         xhr.send(sendData);
       }
     });

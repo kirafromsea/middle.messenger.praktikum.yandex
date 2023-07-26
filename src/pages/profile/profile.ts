@@ -1,27 +1,27 @@
-import chatInfo from '../../../public/chats';
-import {ChatsInfoType} from '../../types/chats';
 import Block from '../../classes/Block';
+import Store from '../../classes/Store';
 import AuthController from '../../controllers/AuthController';
+import {Paths} from '../../utils/constants';
 import Avatar from '../../ui-components/Avatar/avatar';
 import Input from '../../ui-components/Input/input';
 import Button from '../../ui-components/Button/button';
 import Form from '../../ui-components/Form/form';
 import {controlsPassword, controlsProfile} from './controlsInputSettings';
 import {passwordFormButtons, profileFormButtons} from './buttonsSettings';
-import {Paths} from '../../utils/constants';
 import profileTmpl from './profile.tmpl';
+import ProfileController from "../../controllers/ProfileController";
 
 class ProfilePage extends Block {
-  constructor() {
-    const userInfo = AuthController.getUser();
-    console.log('=profile', userInfo);
-    super('div', {});
+ constructor() {
+   AuthController.getUser();
+   const {user, auth} = Store.getState();
+   super('div', {profile: auth ? user : null});
   }
 
-  init() {
-    const {profile} = chatInfo as ChatsInfoType;
-    if (!profile || !profile.login) {
-      window.location.href = '/error/401';
+  async init() {
+   const {profile} = this.props;
+    if (!profile) {
+      //window.location.href = '/error/401';
       return;
     }
 
@@ -35,6 +35,7 @@ class ProfilePage extends Block {
     this.children.profileForm = new Form({
       controls: profileFormInput,
       buttons: buttonsProfile,
+      controller: ProfileController.updateProfile.bind(ProfileController),
       formClassName: 'user-info',
     });
 
@@ -48,6 +49,7 @@ class ProfilePage extends Block {
     this.children.passwordForm = new Form({
       controls: passwordFormInputs,
       buttons: buttonsPassword,
+      controller: ProfileController.updatePassword.bind(ProfileController),
       formClassName: 'user-password',
     });
 
@@ -66,6 +68,7 @@ class ProfilePage extends Block {
   }
 
   render() {
+    console.log('=render profile');
     return this.compile({template: profileTmpl, context: {...this.props}});
   }
 }

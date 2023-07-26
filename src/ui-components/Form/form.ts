@@ -31,7 +31,7 @@ class Form extends Block {
     const buttons = this.children.buttons as Block[];
     buttons.forEach((button) => {
       if (button.getProps('type') === 'submit') {
-        const oldOnClick = button.getProps('events').click;
+        const oldOnClick = button.getProps('events')?.onClick;
         button.setProps({
           events: {
             click: () => {

@@ -30,12 +30,7 @@ const buttonsData: ButtonProps[] = [
     title: 'Log In',
     uiType: 'primary',
     type: 'submit',
-    disabled: false,
-    events: {
-      onClick: () => {
-        // window.location.href = Paths.Chat;
-      },
-    },
+    disabled: false
   },
   {
     title: 'Sign Up',

@@ -9,7 +9,7 @@ export interface UserProfileType {
     display_name?: string;
     phone?: string;
     avatar?: string;
-    [k: string]: string | undefined;
+    //[k: string]: string | undefined;
 }
 
 export interface MessageType {

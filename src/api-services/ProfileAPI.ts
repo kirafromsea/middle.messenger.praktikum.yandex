@@ -1,7 +1,6 @@
 import HTTPTransport from './HTTPTransport';
 import {baseUrl} from '../config';
 import {profileApi, headersJson} from './api-urls';
-import {SignupDataType} from './types';
 
 class ProfileAPIClass {
   public http = new HTTPTransport(`${baseUrl}/user`);
@@ -16,7 +15,7 @@ class ProfileAPIClass {
   }
 
   /** Для изменения данных в профиле */
-  changeUserInfo(data: SignupDataType): Promise<any> {
+  updateUserInfo(data): Promise<any> {
     return this.http.put({
       url: profileApi.changeProfile,
       options: {
@@ -28,7 +27,15 @@ class ProfileAPIClass {
 
   /** Изменение пароля */
 
-  changePassword() {}
+  changePassword(data): Promise<any> {
+    return this.http.put({
+      url: profileApi.changePassword,
+      options: {
+        data,
+        ...headersJson,
+      },
+    });
+  }
 
   /** Изменение аватара */
   changeAvatar() {}

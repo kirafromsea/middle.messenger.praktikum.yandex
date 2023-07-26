@@ -25,7 +25,7 @@ export const controlsProfile: InputProps[] = [
     description: '',
   },
   {
-    name: 'display_mame',
+    name: 'display_name',
     type: 'text',
     value: '',
     placeholder: 'Display name',
