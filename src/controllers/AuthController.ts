@@ -74,6 +74,7 @@ class AuthController {
       const {status, response} = await AuthAPI.logout();
       if (status === 200) {
         this.store.setResetState();
+        console.log('=logout store', this.store);
         this.router.go(Paths.Index);
       } else {
         this.store.set('error', {code: status, response});
