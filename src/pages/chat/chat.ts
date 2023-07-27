@@ -51,15 +51,6 @@ class ChatPage extends Block {
       },
     });
 
-    this.children.logoutButton = new Button({
-      title: 'Logout',
-      uiType: 'third',
-      type: 'button',
-      events: {
-        onClick: AuthController.logout.bind(AuthController),
-      },
-    });
-
     const controlsMessage = new Input({
       name: 'message',
       type: 'text',

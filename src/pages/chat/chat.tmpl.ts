@@ -11,7 +11,6 @@ const chatTmpl = `
         </div>
         <div class="chat-bottom">
             {{{profileButton}}}
-            {{{logoutButton}}}
         </div>
     </div>
     <div class="chat-right">

@@ -1,5 +1,6 @@
+// TODO увести аватар в тег img сделать отображение как с cover для background
 const avatarTmp = `
-    <div class="avatar" style="background-image: url({{{url}}})"></div>
+    <img class="avatar-image" src="{{{url}}}" />
 `;
 
 export default avatarTmp;

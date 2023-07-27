@@ -23,6 +23,8 @@ class Block<T extends Record<string, any> = any> {
 
   public tagName: string;
 
+  public componentName: string;
+
   public events?: { [key: string]: HTMLElement }; // события
 
   /** JSDoc
@@ -31,7 +33,7 @@ class Block<T extends Record<string, any> = any> {
      *
      * @returns {void}
      */
-  constructor(tagName: string, initProps: T) {
+  constructor(tagName: string, initProps: T, componentName?: string) {
     // конструктор - здесь собираем всё необходимое для дайльнейшей работы
     const eventBus = new EventBus();
 
@@ -41,6 +43,7 @@ class Block<T extends Record<string, any> = any> {
     this.children = children;
     this.props = this._makeProxyProps({...props, id: this.id});
     this.tagName = tagName;
+    this.componentName = componentName || tagName;
 
     this.eventBus = () => eventBus;
 
@@ -85,6 +88,11 @@ class Block<T extends Record<string, any> = any> {
   private _componentDidMount() {
     // то что должно происходить при монтировании элемента
     this.componentDidMount();
+    Object.values(this.children).forEach((child: Block): void => {
+      if (child.dispatchComponentDidMount) {
+        child.dispatchComponentDidMount();
+      }
+    });
   }
 
   private _componentDidUpdate() {

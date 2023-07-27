@@ -1,6 +1,6 @@
 import HTTPTransport from './HTTPTransport';
 import {baseUrl} from '../config';
-import {profileApi, headersJson} from './api-urls';
+import {profileApi, headersJson, headersFile} from './api-urls';
 
 class ProfileAPIClass {
   public http = new HTTPTransport(`${baseUrl}/user`);
@@ -38,7 +38,14 @@ class ProfileAPIClass {
   }
 
   /** Изменение аватара */
-  changeAvatar() {}
+  updateAvatar(data) {
+    return this.http.put({
+      url: profileApi.avatar,
+      options: {
+        data
+      }
+    })
+  }
 
   /** Поиск пользователей в системе */
   searchUser() {}

@@ -26,3 +26,9 @@ export const headersJson = {
     'Content-type': 'application/json; charset=UTF-8',
   },
 };
+
+export const headersFile = {
+  headers: {
+    'Content-type':  'multipart/form-data'
+  }
+}

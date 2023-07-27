@@ -38,11 +38,3 @@ class Button extends Block {
 }
 
 export default Button;
-
-/*
-{
-    title, onClick, uiType = 'primary', type = 'button',
-}: ButtonProps) => Handlebars.compile(buttonTmpl)({
-    title, onClick, uiType, type,
-}
- */

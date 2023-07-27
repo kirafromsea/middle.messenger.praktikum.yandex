@@ -4,6 +4,7 @@ import {Paths} from '../utils/constants';
 
 import AuthAPI from '../api-services/AuthAPI';
 import {LoginDataType, SignupDataType} from '../api-services/types';
+import {baseUrl} from "../config";
 
 class AuthController {
   public router: typeof Router = Router;
@@ -25,10 +26,11 @@ class AuthController {
         this.store.set('isLoading', false);
       } else {
         this.store.set('error', {code: status, response});
-        this.router.go(`${Paths.Error}/${status}`);
+        this.router.go(Paths.Error);
       }
     } catch (error) {
       console.log('=api login catch', error);
+      this.store.set('error', {code: 500});
     }
   }
 
@@ -42,13 +44,13 @@ class AuthController {
         this.router.go(Paths.Chat);
       } else {
         this.store.set('error', {code: status, response});
-        this.router.go(`${Paths.Error}/${status}`);
+        this.router.go(Paths.Error);
       }
 
       this.store.set('isLoading', false);
     } catch (error) {
       console.log('=error', error);
-      // TODO сделать сохранение ошибок в store
+      this.store.set('error', {code: 500});
     }
   }
 
@@ -57,14 +59,21 @@ class AuthController {
       this.store.set('error', null);
       const {status, response} = await AuthAPI.getUser();
       if (status === 200 && response) {
-        this.store.set('user', JSON.parse(response));
+        const userInfo = JSON.parse(response);
+        if (userInfo.avatar && userInfo.avatar.trim() !== '') {
+          userInfo.avatar = `${baseUrl}/resources${userInfo.avatar}`;
+        }
+        this.store.set('user', userInfo);
         this.store.set('auth', true);
         return true;
       } else if (status >= 400) {
         this.store.set('error', {code: status, response});
+        this.router.go(Paths.Error);
       }
       return false;
     } catch (error) {
+      this.store.set('error', {code: 500});
+      this.router.go(Paths.Error);
       return false;
     }
   }
@@ -73,15 +82,18 @@ class AuthController {
     try {
       this.store.set('error', null);
       const {status, response} = await AuthAPI.logout();
+      console.log('=logout', status, response);
       if (status === 200) {
-        this.store.setResetState();
+        await this.store.setResetState();
         this.router.go(Paths.Index);
       } else {
         this.store.set('error', {code: status, response});
-        this.router.go(`${Paths.Error}/${status}`);
+        this.router.go(Paths.Error);
       }
     } catch (e) {
       console.log(e);
+      this.store.set('error', {code: 500});
+      this.router.go(Paths.Error);
     }
   }
 }

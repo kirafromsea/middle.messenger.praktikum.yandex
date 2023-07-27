@@ -22,7 +22,7 @@ export type StoreState = {
 };
 
 const initialStoreState: StoreState = {
-  auth: false, // TODO заглушка пока не будет сделана авторизация
+  auth: false,
   user: null,
   isLoading: false,
   getPage: '/',
@@ -36,8 +36,9 @@ const initialStoreState: StoreState = {
     messages: null,
   },
 };
+
 class Store extends EventBus {
-  private state = initialStoreState;
+  private state = {...initialStoreState};
 
   public getState(): StoreState {
     return this.state;
@@ -61,7 +62,7 @@ class Store extends EventBus {
 
   public setResetState(): void {
     try {
-      this.state = initialStoreState;
+      this.state = {...initialStoreState};
       this.emit(storeEventsUpdated);
     } catch (error) {
       console.log('=setResetStore catch', error);

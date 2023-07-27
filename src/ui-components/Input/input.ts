@@ -18,7 +18,7 @@ class Input extends Block {
   constructor(props: InputProps) {
     super('input', {
       regExpValidate: null,
-      events: {},
+      events: props.events || {},
       required: false,
       errorMessage: null,
       ...props,
@@ -26,12 +26,18 @@ class Input extends Block {
   }
 
   init() {
+    const onChange = this.getProps('events')?.onChange;
+
     this.setProps({
       events: {
-        change: (e: Event) => {
-          const field = document.querySelector(`[name=${(e.target as HTMLInputElement).name}]`) as HTMLInputElement;
+        change: (event: Event) => {
+          console.log("=input change", event);
+          const field = document.querySelector(`[name=${(event.target as HTMLInputElement).name}]`) as HTMLInputElement;
           this.setValue(field.value);
           this.validate();
+          if (!!onChange) {
+            onChange(event);
+          }
         },
       },
     });

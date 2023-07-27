@@ -15,13 +15,12 @@ class ProfilePage extends Block {
  constructor() {
    AuthController.getUser();
    const {user, auth} = Store.getState();
-   super('div', {profile: auth ? user : null});
+   super('div', {profile: auth ? user : null}, 'profile-page');
   }
 
-  async init() {
+  init() {
    const {profile} = this.props;
     if (!profile) {
-      //window.location.href = '/error/401';
       return;
     }
 
@@ -64,11 +63,52 @@ class ProfilePage extends Block {
       },
     });
 
-    this.children.avatar = new Avatar({url: profile.avatar || ''});
+    this.children.avatar = this.setAvatar();
+
+    this.children.uploadButton = new Input({
+      name: 'avatar',
+      type: 'file',
+      placeholder: 'Update avatar',
+      required: false,
+      value: this.getProps('url'),
+      events: {
+        onChange: (event) => {
+          if (event) {
+            this.updateAvatar(event);
+          }
+        }
+      }
+    });
+
+    this.children.logoutButton = new Button({
+      title: 'Logout',
+      uiType: 'secondary',
+      type: 'button',
+      events: {
+        onClick: AuthController.logout.bind(AuthController),
+      },
+    });
+  }
+
+  async updateAvatar(e: Event) {
+    const data = new FormData();
+    const elem = e.target as HTMLInputElement;
+    data.set('avatar', elem?.files[0]);
+    const result = await ProfileController.updateAvatar(data);
+    if (result) {
+      this.setProps({profile: result});
+      (this.children.avatar as Block).setProps({url: result?.avatar});
+    }
+  }
+
+  setAvatar() {
+    return new Avatar({
+      url: this.getProps('profile').avatar || null,
+      controller: ProfileController.updateAvatar.bind(ProfileController),
+    });
   }
 
   render() {
-    console.log('=render profile');
     return this.compile({template: profileTmpl, context: {...this.props}});
   }
 }
