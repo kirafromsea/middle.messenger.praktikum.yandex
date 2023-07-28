@@ -43,6 +43,13 @@
       border: 1px solid #9ca3ad;
     }
 
+    .form-buttons, .form-controls {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-self: center;
+    }
+
     .button--primary {
       margin: 15px 0 20px;
     }

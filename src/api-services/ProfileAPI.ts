@@ -1,6 +1,7 @@
 import HTTPTransport from './HTTPTransport';
 import {baseUrl} from '../config';
-import {profileApi, headersJson, headersFile} from './api-urls';
+import {profileApi, headersJson} from './api-urls';
+import {UpdatePasswordProps, UpdateProfileProps} from '../types/profile';
 
 class ProfileAPIClass {
   public http = new HTTPTransport(`${baseUrl}/user`);
@@ -15,7 +16,7 @@ class ProfileAPIClass {
   }
 
   /** Для изменения данных в профиле */
-  updateUserInfo(data): Promise<any> {
+  updateUserInfo(data: UpdateProfileProps): Promise<any> {
     return this.http.put({
       url: profileApi.changeProfile,
       options: {
@@ -27,10 +28,11 @@ class ProfileAPIClass {
 
   /** Изменение пароля */
 
-  changePassword(data): Promise<any> {
+  changePassword(data: UpdatePasswordProps): Promise<any> {
     return this.http.put({
       url: profileApi.changePassword,
       options: {
+        // @ts-ignore
         data,
         ...headersJson,
       },
@@ -38,13 +40,13 @@ class ProfileAPIClass {
   }
 
   /** Изменение аватара */
-  updateAvatar(data) {
+  updateAvatar(data: FormData): Promise<any> {
     return this.http.put({
       url: profileApi.avatar,
       options: {
-        data
-      }
-    })
+        data,
+      },
+    });
   }
 
   /** Поиск пользователей в системе */

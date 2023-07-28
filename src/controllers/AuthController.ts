@@ -4,7 +4,7 @@ import {Paths} from '../utils/constants';
 
 import AuthAPI from '../api-services/AuthAPI';
 import {LoginDataType, SignupDataType} from '../api-services/types';
-import {baseUrl} from "../config";
+import {baseUrl} from '../config';
 
 class AuthController {
   public router: typeof Router = Router;
@@ -66,7 +66,7 @@ class AuthController {
         this.store.set('user', userInfo);
         this.store.set('auth', true);
         return true;
-      } else if (status >= 400) {
+      } if (status >= 400) {
         this.store.set('error', {code: status, response});
         this.router.go(Paths.Error);
       }
@@ -82,7 +82,6 @@ class AuthController {
     try {
       this.store.set('error', null);
       const {status, response} = await AuthAPI.logout();
-      console.log('=logout', status, response);
       if (status === 200) {
         await this.store.setResetState();
         this.router.go(Paths.Index);

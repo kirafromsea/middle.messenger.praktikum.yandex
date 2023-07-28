@@ -30,11 +30,11 @@ const buttonsData: ButtonProps[] = [
     title: 'Log In',
     uiType: 'primary',
     type: 'submit',
-    disabled: false
+    disabled: false,
   },
   {
     title: 'Sign Up',
-    uiType: 'ghost',
+    uiType: 'third',
     type: 'button',
     disabled: false,
     events: {

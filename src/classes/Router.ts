@@ -7,8 +7,8 @@ import {Paths} from '../utils/constants';
 
 class Router {
   public routes: Route[];
+
   public history: History;
-  public store: typeof Store = Store;
 
   public store: typeof Store = Store;
 

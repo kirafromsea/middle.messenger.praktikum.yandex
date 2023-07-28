@@ -7,8 +7,8 @@ const DEFAULT_ERROR_CODE = 404;
 
 class ErrorPage extends Block {
   constructor() {
-    const error = Store.getStateItem('error');
-    const props = {errorCode: error.code || DEFAULT_ERROR_CODE};
+    const {error} = Store.getState();
+    const props = {errorCode: error?.code || DEFAULT_ERROR_CODE};
     const errorIndex = `error_${props.errorCode}`;
     super('div', {
       errorNumber: props.errorCode,

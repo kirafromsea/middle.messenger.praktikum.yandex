@@ -1,23 +1,22 @@
 import {set} from '../utils/object';
 import EventBus from './EventBus';
+import {ChatsType, ChatItemType} from "../types/chats";
 
 const storeEventsUpdated = 'updated';
-
-export type ChatType = Record<string, number | string | unknown>
 
 export type StoreState = {
     auth: boolean,
     user: null | Record<string, string | number>,
     isLoading: false,
     getPage: string,
-    chats: ChatType[],
+    chats: ChatsType,
     error: null | {code: number; response: unknown},
     currentChat: {
         isLoading: boolean,
         isLoadingOldMsg: boolean,
         scroll: number,
-        chat: null | ChatType,
-        messages: ChatType[] | null,
+        chat: null | ChatItemType,
+        messages: ChatsType[] | null,
     },
 };
 
@@ -42,10 +41,6 @@ class Store extends EventBus {
 
   public getState(): StoreState {
     return this.state;
-  }
-
-  public getStateItem(itemName) {
-    return this.state[itemName] || null;
   }
 
   public set(path: string, value: unknown): void {

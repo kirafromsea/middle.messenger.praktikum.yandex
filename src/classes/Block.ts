@@ -88,11 +88,6 @@ class Block<T extends Record<string, any> = any> {
   private _componentDidMount() {
     // то что должно происходить при монтировании элемента
     this.componentDidMount();
-    Object.values(this.children).forEach((child: Block): void => {
-      if (child.dispatchComponentDidMount) {
-        child.dispatchComponentDidMount();
-      }
-    });
   }
 
   private _componentDidUpdate() {

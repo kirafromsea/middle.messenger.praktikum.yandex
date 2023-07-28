@@ -6,11 +6,11 @@ export const authApi = {
 };
 
 export const chatApi = {
-  chats: '/chats', // get - получить чаты текущего пользователя; put - создать чаты текущего пользователя; delete - удалить чат по его ID
-  users: '/chats/:id/users', // get - получить пользователей чата по ID;
-  newMessages: '/chats/new/:id', // get - получить количество новых сообщений в указанном чате;
-  chatAvatar: '/chats/avatar', // put - загрузить аватар чата (через multipart/form-data);
-  addUser: '/chats/users', // put - добавить пользователя в чат; delete - удалить пользователей из чата.
+  chats: '', // get - получить чаты текущего пользователя; put - создать чаты текущего пользователя; delete - удалить чат по его ID
+  users: '/:id/users', // get - получить пользователей чата по ID;
+  newMessages: '/new/:id', // get - получить количество новых сообщений в указанном чате;
+  chatAvatar: '/avatar', // put - загрузить аватар чата (через multipart/form-data);
+  addUser: '/users', // put - добавить пользователя в чат; delete - удалить пользователей из чата.
 };
 
 export const profileApi = {
@@ -26,9 +26,3 @@ export const headersJson = {
     'Content-type': 'application/json; charset=UTF-8',
   },
 };
-
-export const headersFile = {
-  headers: {
-    'Content-type':  'multipart/form-data'
-  }
-}

@@ -11,6 +11,7 @@ const chatTmpl = `
         </div>
         <div class="chat-bottom">
             {{{profileButton}}}
+            {{{buttonNewChat}}}
         </div>
     </div>
     <div class="chat-right">
@@ -24,6 +25,7 @@ const chatTmpl = `
             {{{messageForm}}}
         </div>
     </div>
+    {{{addChatModal}}}
   </div>
 `;
 

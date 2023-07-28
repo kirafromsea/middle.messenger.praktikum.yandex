@@ -1,16 +1,13 @@
-interface RequestOptionsType {
-  headers?: Record<string, string>,
-  data?: {
-    [key: string]: string | number;
-  }
-}
-
-interface OptionsDataType {
+export interface OptionsDataType {
   [key: string]: string | number;
 }
-interface OptionsType extends RequestOptionsType {
+
+interface RequestOptionsType {
   headers?: Record<string, string>,
-  data?: OptionsDataType,
+  data?: OptionsDataType | FormData
+}
+
+export interface OptionsType extends RequestOptionsType {
   timeout?: number;
 }
 
@@ -34,7 +31,7 @@ const METHODS = {
   DELETE: 'DELETE',
 };
 
-function queryStringify(data: OptionsDataType) {
+function queryStringify(data: any) {
   const keys = Object.keys(data);
   return keys.reduce((result, key, index) => `${result}${key}=${data[key]}${index < keys.length - 1 ? '&' : ''}`, '?');
 }
@@ -86,8 +83,8 @@ class HTTPTransport {
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
+        console.log('=data', data);
         const sendData = data instanceof FormData ? data : JSON.stringify(data);
-        console.log('=sendData',data.display_name, sendData);
         xhr.send(sendData);
       }
     });

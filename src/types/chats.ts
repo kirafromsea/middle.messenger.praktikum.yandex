@@ -9,7 +9,7 @@ export interface UserProfileType {
     display_name?: string;
     phone?: string;
     avatar?: string;
-    //[k: string]: string | undefined;
+    // [k: string]: string | undefined;
 }
 
 export interface MessageType {
@@ -19,10 +19,12 @@ export interface MessageType {
 }
 
 export interface ChatItemType {
-    display_name: string;
-    login: string | null;
+    id: number;
+    title: string;
     avatar?: string;
-    messages: MessageType[];
+    created_by: number;
+    unread_count: number;
+    last_messages: null | MessageType[];
 }
 
 export type ChatsType = ChatItemType[];

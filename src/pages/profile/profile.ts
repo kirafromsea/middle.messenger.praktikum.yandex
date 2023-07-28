@@ -9,17 +9,17 @@ import Form from '../../ui-components/Form/form';
 import {controlsPassword, controlsProfile} from './controlsInputSettings';
 import {passwordFormButtons, profileFormButtons} from './buttonsSettings';
 import profileTmpl from './profile.tmpl';
-import ProfileController from "../../controllers/ProfileController";
+import ProfileController from '../../controllers/ProfileController';
 
 class ProfilePage extends Block {
- constructor() {
-   AuthController.getUser();
-   const {user, auth} = Store.getState();
-   super('div', {profile: auth ? user : null}, 'profile-page');
+  constructor() {
+    AuthController.getUser();
+    const {user, auth} = Store.getState();
+    super('div', {profile: auth ? user : null}, 'profile-page');
   }
 
   init() {
-   const {profile} = this.props;
+    const {profile} = this.props;
     if (!profile) {
       return;
     }
@@ -76,8 +76,8 @@ class ProfilePage extends Block {
           if (event) {
             this.updateAvatar(event);
           }
-        }
-      }
+        },
+      },
     });
 
     this.children.logoutButton = new Button({
@@ -93,7 +93,9 @@ class ProfilePage extends Block {
   async updateAvatar(e: Event) {
     const data = new FormData();
     const elem = e.target as HTMLInputElement;
-    data.set('avatar', elem?.files[0]);
+    if (elem?.files) {
+      data.set('avatar', elem?.files[0]);
+    }
     const result = await ProfileController.updateAvatar(data);
     if (result) {
       this.setProps({profile: result});
