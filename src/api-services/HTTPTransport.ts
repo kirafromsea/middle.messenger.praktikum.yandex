@@ -1,5 +1,5 @@
 export interface OptionsDataType {
-  [key: string]: string | number;
+  [key: string]: string | number | string[] | number[];
 }
 
 interface RequestOptionsType {
@@ -9,6 +9,7 @@ interface RequestOptionsType {
 
 export interface OptionsType extends RequestOptionsType {
   timeout?: number;
+  isFormData?: boolean;
 }
 
 interface QueryProps {
@@ -83,7 +84,6 @@ class HTTPTransport {
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        console.log('=data', data);
         const sendData = data instanceof FormData ? data : JSON.stringify(data);
         xhr.send(sendData);
       }

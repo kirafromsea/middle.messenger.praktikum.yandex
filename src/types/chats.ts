@@ -1,5 +1,3 @@
-import {MESSAGE_TYPE_COMPANION, MESSAGE_TYPE_SELF} from '../utils/constants';
-
 export interface UserProfileType {
     login: string;
     email: string;
@@ -9,13 +7,19 @@ export interface UserProfileType {
     display_name?: string;
     phone?: string;
     avatar?: string;
-    // [k: string]: string | undefined;
+}
+
+export interface MessageUserProfileType {
+    first_name: string;
+    second_name: string;
+    avatar: string;
+    login: string;
 }
 
 export interface MessageType {
-    author: typeof MESSAGE_TYPE_SELF | typeof MESSAGE_TYPE_COMPANION;
-    date: string;
-    message: string;
+    user: MessageUserProfileType;
+    time: string;
+    content: string;
 }
 
 export interface ChatItemType {
@@ -24,7 +28,7 @@ export interface ChatItemType {
     avatar?: string;
     created_by: number;
     unread_count: number;
-    last_messages: null | MessageType[];
+    last_messages: MessageType[];
 }
 
 export type ChatsType = ChatItemType[];
@@ -32,4 +36,14 @@ export type ChatsType = ChatItemType[];
 export type ChatsInfoType = {
     profile: UserProfileType;
     chats: ChatsType;
+}
+
+export type ChatUserType = {
+    id: number;
+    first_name: string;
+    second_name: string;
+    display_name: string;
+    login: string;
+    avatar: string;
+    role: string; // 'admin' | '' TODO вычислить роли и добавить их в качестве типа
 }

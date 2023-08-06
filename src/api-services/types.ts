@@ -15,3 +15,12 @@ export type LoginDataType = {
 export type PutChatType = {
     title: string;
 }
+
+export type PostMessageType = {
+    message: string;
+}
+
+export type ChangeChatUsersType = {
+    users: number[],
+    chatId: number
+};

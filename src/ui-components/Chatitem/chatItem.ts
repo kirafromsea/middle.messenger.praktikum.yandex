@@ -1,8 +1,11 @@
 import Block from '../../classes/Block';
 import {ChatItemType} from '../../types/chats';
 import chatItemTmpl from './chatItem.tmpl';
+import {DEFAULT_AVATAR} from '../../utils/constants';
 
-interface ChatItemProps extends Omit<ChatItemType, 'messages'> {
+interface ChatItemProps extends ChatItemType {
+  idChat: number;
+  isActive?: boolean;
   events?: {
     [key: string]: (chatId: number) => void
   }
@@ -10,19 +13,35 @@ interface ChatItemProps extends Omit<ChatItemType, 'messages'> {
 
 class ChatItem extends Block {
   constructor(props: ChatItemProps) {
-    super('div', {...props});
+    super('div', {
+      isActive: false,
+      ...props,
+      avatar: props.avatar || DEFAULT_AVATAR,
+    });
   }
 
   init() {
-    console.log('=chatItem', this.props);
     if (this.getProps('events')?.onClick) {
       const {onClick} = this.getProps('events');
-      this.setProps({events: {click: () => onClick(this.getProps('id'))}});
+      this.setProps({
+        events: {
+          click: () => {
+            this.setProps({
+              ...this.props,
+              isActive: true,
+            });
+            onClick(this.getProps('idChat'));
+          },
+        },
+      });
     }
   }
 
+  changeActive() {
+    this.setProps({isActive: !this.props.isActive});
+  }
+
   render() {
-    console.log('=chatItem render');
     return this.compile({template: chatItemTmpl, context: this.props});
   }
 }

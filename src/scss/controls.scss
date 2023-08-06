@@ -48,6 +48,19 @@
       background: rgb(245 249 255 / 90%);
     }
   }
+
+  &--danger {
+    width: auto;
+    height: 24px;
+    background: none;
+    color: $button-danger;
+    font-size: 16px;
+    border: none;
+
+    &:hover {
+      background: rgb(245 249 255 / 90%);
+    }
+  }
 }
 
 input {
