@@ -26,7 +26,6 @@ class AuthController {
         this.store.set('isLoading', false);
       } else {
         this.store.set('error', {code: status, response});
-        this.router.go(Paths.Error);
       }
     } catch (error) {
       console.log('=api login catch', error);
@@ -44,7 +43,6 @@ class AuthController {
         this.router.go(Paths.Chat);
       } else {
         this.store.set('error', {code: status, response});
-        this.router.go(Paths.Error);
       }
 
       this.store.set('isLoading', false);
@@ -68,7 +66,6 @@ class AuthController {
         return true;
       } if (status >= 400) {
         this.store.set('error', {code: status, response});
-        this.router.go(Paths.Error);
       }
       return false;
     } catch (error) {

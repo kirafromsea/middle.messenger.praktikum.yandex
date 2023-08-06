@@ -1,4 +1,4 @@
-const chatModalTmpl = `
+const addChatModalTmpl = `
   <div class="modal-shadow modal-shadow--hide">
     <div class="modal-content">
         <div class="modal-close">{{{closeButton}}}</div>
@@ -9,4 +9,4 @@ const chatModalTmpl = `
   </div>
 `;
 
-export default chatModalTmpl;
+export default addChatModalTmpl;

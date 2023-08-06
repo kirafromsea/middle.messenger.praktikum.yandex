@@ -1,12 +1,11 @@
 import Block from '../../classes/Block';
+import {DEFAULT_AVATAR} from '../../utils/constants';
 import avatarTmpl from './avatar.tmpl';
 
 type AvatarProps = {
     url: string | null;
     controller?: Function;
 }
-
-const DEFAULT_AVATAR = '../../../public/avatars/rigel.jpg';
 
 class Avatar extends Block {
   constructor(props: AvatarProps) {
@@ -21,7 +20,6 @@ class Avatar extends Block {
   }
 
   render() {
-    console.log('=avatar', this.props);
     return this.compile({
       template: avatarTmpl,
       context: this.props,

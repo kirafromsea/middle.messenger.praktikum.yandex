@@ -54,6 +54,10 @@
           cursor: pointer;
           border-bottom: 1px solid $secondary-background;
           padding: 8px 12px;
+
+          &.chat-list--active {
+            background: $primary-background;
+          }
         }
       }
     }
@@ -80,6 +84,8 @@
 
     .chat-header {
       border-bottom: 1px solid $primary-background;
+      display: flex;
+      justify-content: flex-end;
     }
 
     .chat-massages {
@@ -89,6 +95,17 @@
 
     .chat-bottom {
       border-top: 1px solid $primary-background;
+      .form-controls {
+        width: 100%;
+      }
+    }
+
+    .avatar-image {
+      margin-left: 20px;
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
     }
   }
 }
@@ -112,10 +129,13 @@
   height: 42px;
   display: inline-block;
   border-radius: 50%;
-  overflow: hidden;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 }
 
 .message-item {
@@ -190,11 +210,82 @@
         margin: 0 10px;
       }
     }
+
+    .add-new-user {
+      display: flex;
+      justify-content: space-between;
+      .form-controls {
+        flex-grow: 1;
+        .form-field {
+          margin: 0;
+          flex-grow: 1;
+
+          input {
+            height: 28px;
+          }
+        }
+      }
+    }
   }
 
   &-close {
     position: absolute;
     top: 12px;
     right: 12px;
+  }
+
+  &__avatar-settings {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 24px;
+    }
+    .form-field{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &-chat {
+    &__delete-chat {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 60px;
+    }
+
+    &__user-list {
+      border: 1px solid $input-border;
+      margin-bottom: 4px;
+
+      .users-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          padding: 4px 8px;
+          background: $primary-background;
+          &:nth-child(2n) {
+            background: $secondary-background;
+          }
+
+          .user-role--admin {
+            color: $text-success;
+          }
+        }
+      }
+    }
   }
 }

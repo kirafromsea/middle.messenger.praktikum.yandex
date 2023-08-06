@@ -21,6 +21,10 @@ export const profileApi = {
   search: '/search', // поиск пользователей в системе (возвращается максимально 10 человек).
 };
 
+export const usersApi = {
+  search: '/search', // post - поиск пользователей по логину
+};
+
 export const headersJson = {
   headers: {
     'Content-type': 'application/json; charset=UTF-8',

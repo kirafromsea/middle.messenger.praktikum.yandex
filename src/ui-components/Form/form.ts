@@ -31,14 +31,16 @@ class Form extends Block {
     const buttons = this.children.buttons as Block[];
     buttons.forEach((button) => {
       if (button.getProps('type') === 'submit') {
-        const oldOnClick = button.getProps('events')?.onClick;
+        const oldOnClick = button.getProps('events')?.click;
         button.setProps({
           events: {
-            click: () => {
-              const result: boolean = this.submit();
-              if (result && oldOnClick) {
-                oldOnClick();
-              }
+            click: async () => {
+              this.submit().then(() => {
+                console.log('=then submit');
+                if (oldOnClick) {
+                  oldOnClick();
+                }
+              });
             },
           },
         });
@@ -68,7 +70,7 @@ class Form extends Block {
     }
   }
 
-  submit(): boolean {
+  async submit() {
     this.validate();
     const dataForm = this.getProps('data');
 
@@ -81,7 +83,9 @@ class Form extends Block {
     }
 
     console.log('Data form is valid. Go to next page');
-    if (this.controller) this.controller(dataForm);
+    if (this.controller) {
+      await this.controller(dataForm);
+    }
     return true;
   }
 

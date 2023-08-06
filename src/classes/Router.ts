@@ -59,6 +59,7 @@ class Router {
       this.history.pushState({}, '', Paths.Index);
     }
 
+    console.log('=pathname', pathname);
     /**
      * Если изначальный адрес страницы был из существующих,
      * то выводим нужный путь в зависимости от того была авторизация или нет.
