@@ -2,6 +2,7 @@
 
 .profile-page {
   height: auto;
+
   .page_content {
     position: relative;
     padding: 40px;
@@ -20,6 +21,7 @@
       width: 160px;
       height: 160px;
       object-fit: cover;
+      border-radius: 50%;
     }
 
     &-upload {

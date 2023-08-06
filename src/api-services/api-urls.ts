@@ -10,7 +10,7 @@ export const chatApi = {
   users: '/:id/users', // get - получить пользователей чата по ID;
   newMessages: '/new/:id', // get - получить количество новых сообщений в указанном чате;
   chatAvatar: '/avatar', // put - загрузить аватар чата (через multipart/form-data);
-  addUser: '/users', // put - добавить пользователя в чат; delete - удалить пользователей из чата.
+  changeUsers: '/users', // put - добавить пользователя в чат; delete - удалить пользователей из чата.
 };
 
 export const profileApi = {
@@ -19,6 +19,10 @@ export const profileApi = {
   changePassword: '/password', // put изменить пароль текущего пользователя;
   userInfo: '/:id', // getf получить информацию о пользователе по ID (можно использовать, например, для отображения аватаров и логинов в чате);
   search: '/search', // поиск пользователей в системе (возвращается максимально 10 человек).
+};
+
+export const usersApi = {
+  search: '/search', // post - поиск пользователей по логину
 };
 
 export const headersJson = {

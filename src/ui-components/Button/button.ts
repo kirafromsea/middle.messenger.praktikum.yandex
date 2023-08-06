@@ -4,7 +4,7 @@ import buttonTmpl from './button.tmpl';
 export type ButtonProps = {
   title: string;
   onClick?: () => void;
-  uiType?: 'primary' | 'secondary' | 'third' | 'ghost';
+  uiType?: 'primary' | 'secondary' | 'third' | 'ghost' | 'danger';
   type?: 'button' | 'submit';
   disabled?: boolean;
   events?: {

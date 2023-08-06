@@ -1,5 +1,4 @@
 // TODO разделить на компоненты, когда будет время после дедлайнов
-import chatInfo from '../../../public/chats';
 import Block from '../../classes/Block';
 import Store from '../../classes/Store';
 import Button from '../../ui-components/Button/button';
@@ -8,18 +7,19 @@ import Form from '../../ui-components/Form/form';
 import {ChatItem} from '../../ui-components/index';
 import MessageItem from '../../ui-components/MessageItem/messageItem';
 import ChatController from '../../controllers/ChatController';
-import {MESSAGE_TYPE_SELF, Paths} from '../../utils/constants';
-import {ModalsSettingsNameProps} from './modalsSettings';
+import {Paths} from '../../utils/constants';
+import Avatar from '../../ui-components/Avatar/avatar';
 import chatTmpl from './chat.tmpl';
-import ChatModal from './chatModal';
-import {ChatItemType, ChatsType} from "../../types/chats";
-import chatItem from "../../ui-components/Chatitem/chatItem";
+import AddChatModal from '../../components/AddChatModal/addChatModal';
+import {ChatsType, ChatItemType, MessageType} from '../../types/chats';
+import SettingsChatModal from '../../components/SettingsChatModal/settingsChatModal';
 
-class ChatPage extends Block<{chats: ChatsType; activeChat: ChatItemType | null}> {
+type ModalsSettingsNameProps = 'addChatModal' | 'settingsChatModal';
+class ChatPage extends Block {
   constructor() {
     super('div', {
       chats: [],
-      activeChat: null
+      activeChat: null,
     });
   }
 
@@ -65,7 +65,7 @@ class ChatPage extends Block<{chats: ChatsType; activeChat: ChatItemType | null}
       uiType: 'third',
       type: 'button',
       events: {
-        onClick: () => this.toggleModal('addChat'),
+        onClick: () => this.toggleModal('addChatModal'),
       },
     });
 
@@ -90,65 +90,119 @@ class ChatPage extends Block<{chats: ChatsType; activeChat: ChatItemType | null}
     this.children.messageForm = new Form({
       controls: [controlsMessage],
       buttons: [buttonMessage],
-      formClassName: 'chat-bottom',
+      formClassName: 'chat-bottom chat-bottom_message',
+      controller: ChatController.setMessage.bind(ChatController),
     });
 
-    console.log('=Store.getState().chats', Store.getState().chats);
-    this.children.chatsList = Store.getState().chats.map((item) => new ChatItem({
+    this.chatsList(chats);
+
+    // Modals
+    this.children.addChatModal = new AddChatModal({
+      onClose: () => { this.toggleModal('addChatModal'); },
+      onSubmit: async () => {
+        const newChats = await ChatController.getChats();
+        this.chatsList(newChats);
+        this.setProps({chats: newChats});
+      },
+    });
+
+    this.children.settingsChatButton = new Button({
+      title: 'Settings',
+      uiType: 'third',
+      type: 'button',
+      events: {
+        onClick: () => {
+          this.toggleModal('settingsChatModal');
+        },
+      },
+    });
+    this.setProps({
+      chats,
+      activeChat: null,
+    });
+  }
+
+  toggleModal(modalName: ModalsSettingsNameProps, isOpen?: boolean) {
+    const modal = (this.children[modalName] as Block)?.getContent();
+    if (modal && typeof isOpen === 'boolean') {
+      modal.classList.toggle('modal-shadow--hide', isOpen);
+    } else if (modal) {
+      modal.classList.toggle('modal-shadow--hide');
+    }
+  }
+
+  changeChat(chatId: number) {
+    const activeChat = this.props.chats.filter((item: ChatItemType) => item.id === chatId)[0];
+    const state = Store.getState();
+    this.children.messageList = activeChat.last_messages.map((message: MessageType) => new MessageItem({
+      avatar: message.user.avatar || '',
+      message: message.content,
+      date: message.time.trim(),
+      type: message.user.login === state.user?.login ? 'self' : 'companion',
+    }));
+
+    this.children.activeChatAvatar = this.setAvatar(activeChat.avatar);
+    Store.set('activeChat', activeChat);
+
+    if (Array.isArray(this.children.chatsList)) {
+      this.children.chatsList.forEach((item) => {
+        item.setProps({isActive: item.getProps('idChat') === activeChat.id});
+      });
+    }
+
+    this.chatSettingsModal(activeChat);
+
+    this.setProps({
+      ...this.props,
+      activeChat,
+    });
+  }
+
+  chatsList(chats: ChatsType) {
+    /*
+    idChat: number;
+  isActive?: boolean;
+  events?: {
+    [key: string]: (chatId: number) => void
+  }
+     */
+    this.children.chatsList = chats.map((item) => new ChatItem({
       ...item,
+      idChat: item.id,
+      isActive: false, // TODO можно в будущем сделать по умолчанию активным первый чат из списка
       events: {
         onClick: (chatId) => {
           this.changeChat(chatId);
         },
       },
     }));
-    // this.changeChat(this.getProps('activeChat'));
+  }
 
-    // Modals
-    this.children.addChatModal = new ChatModal({
-      modalName: 'addChat',
-      controller: ChatController.addChat.bind(ChatController),
-      onClose: () => { this.toggleModal('addChat'); },
-      onSubmit: () => {
-        console.log('=submit add chat');
+  setAvatar(url: string) {
+    return new Avatar({
+      url: url || null,
+      // controller: ProfileController.updateAvatar.bind(ProfileController),
+    });
+  }
+
+  sendMessage(content: string) {
+    console.log('=content', content);
+  }
+
+  chatSettingsModal(activeChat: ChatItemType) {
+    this.children.settingsChatModal = new SettingsChatModal({
+      activeChat,
+      onClose: () => { this.toggleModal('settingsChatModal'); },
+      afterChange: async () => {
+        const newChats = await ChatController.getChats();
+        this.chatsList(newChats);
+        await this.setProps({chats: newChats});
+        this.toggleModal('settingsChatModal', true);
       },
     });
-
-    this.setProps({
-      chats,
-      activeChat: null
-    });
-  }
-
-  toggleModal(modalName: ModalsSettingsNameProps) {
-    const name = `${modalName}Modal`;
-    const modal = (this.children[name] as Block).getContent();
-    if (modal) {
-      modal.classList.toggle('modal-shadow--hide');
-      //modal.setAttribute('style', '{display: inline-block}');
-    }
-  }
-
-  changeChat(chatId: number) {
-    const activeChat = this.props.chats.filter((item) => item.id === chatId)[0];
-    /*
-    if (activeChat?.messages?.length > 0) {
-      this.children.messageList = activeChat.messages.map((message) => new MessageItem({
-        avatar: (message.author === MESSAGE_TYPE_SELF ? profile.avatar : activeChat.avatar) || '',
-        message: message.message,
-        date: message.date,
-        type: message.author === 'self' ? message.author : 'companion',
-      }));
-    }
-    this.setProps({
-      ...this.props,
-      activeChat
-    });
-     */
   }
 
   render() {
-    console.log('=render', this.props, this.children);
     return this.compile({template: chatTmpl, context: {...this.props}});
   }
 }

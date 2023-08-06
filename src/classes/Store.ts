@@ -1,6 +1,6 @@
 import {set} from '../utils/object';
 import EventBus from './EventBus';
-import {ChatsType, ChatItemType} from "../types/chats";
+import {ChatsType, ChatItemType} from '../types/chats';
 
 const storeEventsUpdated = 'updated';
 
@@ -11,13 +11,7 @@ export type StoreState = {
     getPage: string,
     chats: ChatsType,
     error: null | {code: number; response: unknown},
-    currentChat: {
-        isLoading: boolean,
-        isLoadingOldMsg: boolean,
-        scroll: number,
-        chat: null | ChatItemType,
-        messages: ChatsType[] | null,
-    },
+    activeChat: ChatItemType | null
 };
 
 const initialStoreState: StoreState = {
@@ -27,13 +21,7 @@ const initialStoreState: StoreState = {
   getPage: '/',
   chats: [],
   error: null,
-  currentChat: {
-    isLoading: false,
-    isLoadingOldMsg: false,
-    scroll: 0,
-    chat: null,
-    messages: null,
-  },
+  activeChat: null,
 };
 
 class Store extends EventBus {

@@ -16,16 +16,22 @@ const chatTmpl = `
     </div>
     <div class="chat-right">
         <div class="chat-right">
-            <div class="chat-header"></div>
-            <div class="chat-massages">
-              {{#each messageList}}  
-                {{{this}}}
-              {{/each}}
-            </div>
-            {{{messageForm}}}
+            {{#if activeChat}}
+              <div class="chat-header">
+                {{{settingsChatButton}}}
+                {{{activeChatAvatar}}}
+              </div>
+                <div class="chat-massages">
+                  {{#each messageList}}  
+                    {{{this}}}
+                  {{/each}}
+                </div>
+                {{{messageForm}}}
+            {{/if}}
         </div>
     </div>
     {{{addChatModal}}}
+    {{{settingsChatModal}}}
   </div>
 `;
 

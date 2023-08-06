@@ -31,7 +31,6 @@ class Input extends Block {
     this.setProps({
       events: {
         change: (event: Event) => {
-          console.log('=input change', event);
           const field = document.querySelector(`[name=${(event.target as HTMLInputElement).name}]`) as HTMLInputElement;
           this.setValue(field.value);
           this.validate();

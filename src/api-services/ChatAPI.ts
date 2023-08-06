@@ -1,14 +1,14 @@
 import HTTPTransport from './HTTPTransport';
 import {baseUrl} from '../config';
-import {chatApi} from './api-urls';
-import {PutChatType} from './types';
+import {chatApi, headersJson} from './api-urls';
+import {PutChatType, ChangeChatUsersType} from './types';
 
 class ChatAPIClass {
   public http = new HTTPTransport(`${baseUrl}/chats`);
 
   chats(): Promise<any> {
     return this.http.get({
-      url: chatApi.chats
+      url: chatApi.chats,
     });
   }
 
@@ -17,9 +17,56 @@ class ChatAPIClass {
       url: chatApi.chats,
       options: {
         data,
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
+        ...headersJson,
+      },
+    });
+  }
+
+  deleteChat(chatId: number): Promise<any> {
+    return this.http.delete({
+      url: chatApi.chats,
+      options: {
+        data: {
+          chatId,
         },
+        ...headersJson,
+      },
+    });
+  }
+
+  putAvatar(data: FormData): Promise<any> {
+    return this.http.put({
+      url: chatApi.chatAvatar,
+      options: {
+        data,
+        isFormData: true,
+      },
+    });
+  }
+
+  getUsers(chatId: number): Promise<any> {
+    return this.http.get({
+      url: chatApi.users.replace(':id', String(chatId)),
+      options: {},
+    });
+  }
+
+  putUsers(data: ChangeChatUsersType): Promise<any> {
+    return this.http.put({
+      url: chatApi.changeUsers,
+      options: {
+        data,
+        ...headersJson,
+      },
+    });
+  }
+
+  deleteUser(data: ChangeChatUsersType): Promise<any> {
+    return this.http.delete({
+      url: chatApi.changeUsers,
+      options: {
+        data,
+        ...headersJson,
       },
     });
   }
