@@ -74,11 +74,6 @@ const buttonsData: ButtonProps[] = [
     uiType: 'primary',
     type: 'submit',
     disabled: false,
-    events: {
-      onClick: () => {
-        // window.location.href = Paths.Chat;
-      },
-    },
   },
   {
     title: 'Log In',
@@ -96,7 +91,7 @@ const buttonsData: ButtonProps[] = [
 
 class RegistrationPage extends Block {
   constructor() {
-    super('div', {});
+    super({});
   }
 
   init() {

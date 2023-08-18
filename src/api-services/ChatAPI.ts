@@ -70,6 +70,15 @@ class ChatAPIClass {
       },
     });
   }
+
+  getToken(id: number): Promise<any> {
+    return this.http.post({
+      url: chatApi.token.replace(':id', String(id)),
+      options: {
+        ...headersJson,
+      },
+    });
+  }
 }
 
 const ChatAPI = new ChatAPIClass();

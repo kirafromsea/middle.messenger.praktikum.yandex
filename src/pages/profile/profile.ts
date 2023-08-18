@@ -15,7 +15,7 @@ class ProfilePage extends Block {
   constructor() {
     AuthController.getUser();
     const {user, auth} = Store.getState();
-    super('div', {profile: auth ? user : null}, 'profile-page');
+    super({profile: auth ? user : null});
   }
 
   init() {

@@ -3,7 +3,3 @@ const buttonTmpl = `
 `;
 
 export default buttonTmpl;
-
-/*
-<Button class="button button--{{uiType}}" type="{{type}}" onClick={{{onClick}}}>{{title}}</Button>
- */

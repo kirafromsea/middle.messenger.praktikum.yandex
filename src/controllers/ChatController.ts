@@ -1,29 +1,79 @@
 import ProfileAPI from '../api-services/ProfileAPI';
 import Store from '../classes/Store';
 import ChatAPI from '../api-services/ChatAPI';
-import {PutChatType, PostMessageType} from '../api-services/types';
+import {PutChatType} from '../api-services/types';
 import {ChatItemType, ChatUserType} from '../types/chats';
 import {baseUrl} from '../config';
 import UsersController from './UsersController';
+import MessagesController from './MessagesController';
+
+type UserToObjectType = {
+  [k: string]: ChatUserType;
+}
+const userArrayToObject = (users: ChatUserType[]) => {
+  const usersObject: UserToObjectType = {};
+
+  users?.forEach((user) => {
+    const userId = `user_${user.id}`;
+    if (!usersObject[userId]) {
+      usersObject[userId] = user;
+    }
+  });
+
+  return usersObject;
+};
 
 class ChatController {
   public store: typeof Store = Store;
 
+  public async getToken(id: number) {
+    try {
+      const {status, response} = await ChatAPI.getToken(id);
+
+      if (status === 200) {
+        return JSON.parse(response).token;
+      }
+    } catch (error) {
+      console.log('error in getToken method', error);
+      this.store.set('error', {error, code: 400});
+    }
+    return null;
+  }
+
   public async getChats() {
-    let chats = null;
+    const chats: ChatItemType[] = [];
     try {
       this.store.set('error', null);
+      this.store.set('isLoading', true);
       const {status, response} = await ChatAPI.chats();
       if (status === 200) {
-        chats = JSON.parse(response).map((item: ChatItemType) => ({
-          ...item,
-          avatar: item.avatar ? `${baseUrl}/resources${item.avatar}` : null,
-          last_messages: !item.last_messages ? [] : item.last_messages,
-        }));
+        /**
+         * TODO оптимизировать. Возможно подгружать токен и сообщения после отрисовки чатов.
+         * Избавиться от лишних ререндеров при подгрузке сообщений чатов.
+         */
+        for (const item of JSON.parse(response)) {
+          const token = await this.getToken(item.id);
+
+          const users = await this.getUsers(item.id);
+          chats.push({
+            created_by: item.created_by,
+            id: item.id,
+            title: item.title,
+            unread_count: item.unread_count,
+            avatar: item.avatar ? `${baseUrl}/resources${item.avatar}` : null,
+            last_message: !item.last_message ? [] : [item.last_message],
+            users: userArrayToObject(users),
+          });
+
+          await MessagesController.connect(item.id, token);
+        }
+
         this.store.set('chats', chats);
+        this.store.set('isLoading', false);
       } else {
         this.store.set('chats', null);
         this.store.set('error', {code: status, response});
+        this.store.set('isLoading', true);
       }
     } catch (e) {
       console.log(e);
@@ -38,7 +88,7 @@ class ChatController {
       this.store.set('error', null);
       const {status, response} = await ChatAPI.postChat(data);
       if (status === 200) {
-        // this.store.set('chats', response);
+        this.store.set('chats', response);
         return response;
       }
       this.store.set('chats', null);
@@ -74,17 +124,15 @@ class ChatController {
       const {status, response} = await ProfileAPI.getProfile(userId);
       if (status === 200) {
         await this.store.setResetState();
-      } else {
-        this.store.set('error', {code: status, response});
+        return JSON.parse(response);
       }
+      this.store.set('error', {code: status, response});
     } catch (e) {
       console.log(e);
       this.store.set('error', {code: 500});
     }
-  }
 
-  public async setMessage(message: PostMessageType) {
-    console.log('=message', message);
+    return [];
   }
 
   public async updateAvatar(data: FormData) {
@@ -119,7 +167,6 @@ class ChatController {
     try {
       this.store.set('error', null);
       const {status, response} = await ChatAPI.getUsers(chatId);
-      console.log('=getUser', response);
       if (status === 200) {
         return JSON.parse(response).map((item: ChatUserType) => ({
           ...item,
@@ -148,7 +195,7 @@ class ChatController {
         });
 
         if (status === 200) {
-          return JSON.parse(response);
+          return true;
         }
         this.store.set('error', {code: status, response});
       }

@@ -53,7 +53,7 @@ class Route {
     if (!this._blockClass) {
       return;
     }
-    this._block = new this._blockClass('div', {});
+    this._block = new this._blockClass({});
     render(this._props.rootQuery, this._block);
     const root = document.querySelector(this._props.rootQuery);
     if (root && this._block !== null) {

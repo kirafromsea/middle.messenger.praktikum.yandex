@@ -1,53 +1,41 @@
 // TODO разделить на компоненты, когда будет время после дедлайнов
 import Block from '../../classes/Block';
-import Store from '../../classes/Store';
+import Store, {StoreState} from '../../classes/Store';
+import withStore from '../../utils/withStore';
+import {Paths} from '../../utils/constants';
+import {ChatItemType, ChatMessageType, ChatsType} from '../../types/chats';
 import Button from '../../ui-components/Button/button';
 import Input from '../../ui-components/Input/input';
 import Form from '../../ui-components/Form/form';
-import {ChatItem} from '../../ui-components/index';
+import ChatItem from '../../ui-components/Chatitem/chatItem';
 import MessageItem from '../../ui-components/MessageItem/messageItem';
-import ChatController from '../../controllers/ChatController';
-import {Paths} from '../../utils/constants';
 import Avatar from '../../ui-components/Avatar/avatar';
-import chatTmpl from './chat.tmpl';
-import AddChatModal from '../../components/AddChatModal/addChatModal';
-import {ChatsType, ChatItemType, MessageType} from '../../types/chats';
 import SettingsChatModal from '../../components/SettingsChatModal/settingsChatModal';
+import AddChatModal from '../../components/AddChatModal/addChatModal';
+import ChatController from '../../controllers/ChatController';
+import MessagesController from '../../controllers/MessagesController';
+import chatTmpl from './chat.tmpl';
 
 type ModalsSettingsNameProps = 'addChatModal' | 'settingsChatModal';
+
+type ChatPageProps = {
+  messages?: ChatMessageType[];
+  isLoading?: boolean;
+  user?: null | Record<string, string | number>;
+  chats?: ChatsType;
+  error?: null | {code: number; response: unknown};
+  activeChat?: ChatItemType | null;
+}
+
 class ChatPage extends Block {
-  constructor() {
-    super('div', {
-      chats: [],
-      activeChat: null,
+  constructor(initProps: ChatPageProps) {
+    super({
+      ...initProps,
     });
   }
 
   async init() {
-    const chats: ChatsType = await ChatController.getChats();
-
-    const controlsSearch = new Input({
-      name: 'search',
-      type: 'text',
-      placeholder: 'Search',
-    });
-
-    const buttonSearch = new Button({
-      title: 'Search',
-      uiType: 'third',
-      type: 'submit',
-      events: {
-        onClick: () => {
-          console.log('=search');
-        },
-      },
-    });
-
-    this.children.searchForm = new Form({
-      controls: [controlsSearch],
-      buttons: [buttonSearch],
-      formClassName: 'chat-header',
-    });
+    await ChatController.getChats();
 
     this.children.profileButton = new Button({
       title: 'Profile',
@@ -80,29 +68,23 @@ class ChatPage extends Block {
       title: 'Send',
       uiType: 'third',
       type: 'submit',
-      events: {
-        onClick: () => {
-          console.log('=message');
-        },
-      },
     });
 
+    // Messages
     this.children.messageForm = new Form({
       controls: [controlsMessage],
       buttons: [buttonMessage],
       formClassName: 'chat-bottom chat-bottom_message',
-      controller: ChatController.setMessage.bind(ChatController),
+      controller: MessagesController.sendMessage.bind(MessagesController),
+      clearAfterSubmit: true,
     });
-
-    this.chatsList(chats);
 
     // Modals
     this.children.addChatModal = new AddChatModal({
       onClose: () => { this.toggleModal('addChatModal'); },
       onSubmit: async () => {
-        const newChats = await ChatController.getChats();
-        this.chatsList(newChats);
-        this.setProps({chats: newChats});
+        const newChats: ChatsType = await ChatController.getChats();
+        this.chatsList(newChats, this.props.activeChat?.id);
       },
     });
 
@@ -116,10 +98,14 @@ class ChatPage extends Block {
         },
       },
     });
-    this.setProps({
-      chats,
-      activeChat: null,
-    });
+    this.chatsList(this.props.chats, this.props.activeChat?.id);
+  }
+
+  componentDidUpdate(oldProps?: ChatPageProps, newProps?: ChatPageProps) {
+    if (oldProps?.messages !== newProps?.messages && this.props.activeChat) {
+      this.messageList(this.props.activeChat);
+    }
+    return true;
   }
 
   toggleModal(modalName: ModalsSettingsNameProps, isOpen?: boolean) {
@@ -131,62 +117,47 @@ class ChatPage extends Block {
     }
   }
 
+  messageList(activeChat: ChatItemType) {
+    this.children.messageList = this.props.messages.filter((message: ChatMessageType) => message.type === 'message')
+      .map((message: ChatMessageType) => new MessageItem({
+        avatar: activeChat?.users[`user_${message?.user_id}`]?.avatar || '',
+        message: message.content,
+        date: message.time.trim(),
+        type: message.user_id === this.props.user?.id ? 'self' : 'companion',
+      }));
+  }
+
   changeChat(chatId: number) {
-    const activeChat = this.props.chats.filter((item: ChatItemType) => item.id === chatId)[0];
-    const state = Store.getState();
-    this.children.messageList = activeChat.last_messages.map((message: MessageType) => new MessageItem({
-      avatar: message.user.avatar || '',
-      message: message.content,
-      date: message.time.trim(),
-      type: message.user.login === state.user?.login ? 'self' : 'companion',
-    }));
+    let activeChat: ChatItemType;
+    this.props.chats.forEach((item: ChatItemType) => {
+      if (item.id === chatId) {
+        activeChat = {...item};
+        this.chatSettingsModal(activeChat);
+        this.children.activeChatAvatar = this.setAvatar(activeChat.avatar || null);
+        this.chatsList(this.props.chats, activeChat.id);
 
-    this.children.activeChatAvatar = this.setAvatar(activeChat.avatar);
-    Store.set('activeChat', activeChat);
-
-    if (Array.isArray(this.children.chatsList)) {
-      this.children.chatsList.forEach((item) => {
-        item.setProps({isActive: item.getProps('idChat') === activeChat.id});
-      });
-    }
-
-    this.chatSettingsModal(activeChat);
-
-    this.setProps({
-      ...this.props,
-      activeChat,
+        Store.set('activeChat', activeChat);
+      }
     });
   }
 
-  chatsList(chats: ChatsType) {
-    /*
-    idChat: number;
-  isActive?: boolean;
-  events?: {
-    [key: string]: (chatId: number) => void
-  }
-     */
-    this.children.chatsList = chats.map((item) => new ChatItem({
+  chatsList(chats: ChatItemType[], activeChatId?: number) {
+    this.children.chatsList = chats.map((item: ChatItemType) => new ChatItem({
       ...item,
       idChat: item.id,
-      isActive: false, // TODO можно в будущем сделать по умолчанию активным первый чат из списка
+      isActive: item.id === activeChatId,
       events: {
-        onClick: (chatId) => {
+        onClick: (chatId: number) => {
           this.changeChat(chatId);
         },
       },
     }));
   }
 
-  setAvatar(url: string) {
+  setAvatar(url: string | null) {
     return new Avatar({
-      url: url || null,
-      // controller: ProfileController.updateAvatar.bind(ProfileController),
+      url,
     });
-  }
-
-  sendMessage(content: string) {
-    console.log('=content', content);
   }
 
   chatSettingsModal(activeChat: ChatItemType) {
@@ -195,7 +166,7 @@ class ChatPage extends Block {
       onClose: () => { this.toggleModal('settingsChatModal'); },
       afterChange: async () => {
         const newChats = await ChatController.getChats();
-        this.chatsList(newChats);
+        this.chatsList(newChats, activeChat.id);
         await this.setProps({chats: newChats});
         this.toggleModal('settingsChatModal', true);
       },
@@ -207,4 +178,22 @@ class ChatPage extends Block {
   }
 }
 
-export default ChatPage;
+const withMessages = withStore((state: StoreState) => {
+  const activeChatId = state.activeChat?.id;
+  const messages = state.messages && activeChatId ? state.messages[activeChatId] : [];
+  const chats = state.chats || [];
+  try {
+    return {
+      user: state.user,
+      error: state.error,
+      messages,
+      chats,
+      activeChat: state.activeChat,
+      isLoading: state.isLoading,
+    };
+  } catch {
+    return {messages: [], chats: [], isLoading: false};
+  }
+});
+console.log('=whithStore', withMessages);
+export default withMessages(ChatPage);

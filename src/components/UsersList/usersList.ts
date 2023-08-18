@@ -9,7 +9,7 @@ interface UsersListProps {
 }
 class UsersList extends Block {
   constructor(props: UsersListProps) {
-    super('div', {...props});
+    super({...props});
   }
 
   async init() {
@@ -42,6 +42,8 @@ class UsersList extends Block {
                 this.setProps({
                   usersList: this.props.usersList.filter((item: ChatUserType) => item.id !== userId),
                 });
+
+                // TODO После удаления пользователя сделать отправку сообщения в чат
               }
             }
           }

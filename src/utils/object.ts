@@ -45,6 +45,10 @@ export const set = (object: Indexed | unknown, path: string, value: unknown): In
 };
 
 export const isEqual = (a: Indexed, b: Indexed): boolean => {
+  if (!a || !b) {
+    return a === b;
+  }
+
   if (Object.keys(a).length !== Object.keys(b).length) {
     return false;
   }
@@ -69,26 +73,14 @@ export const isEqual = (a: Indexed, b: Indexed): boolean => {
 
 export function cloneDeep(obj: Record<string, unknown | any>): Record<string, unknown | any> {
   return (function _cloneDeep(item: any): Record<string, unknown | any> {
-    // Handle:
-    // * null
-    // * undefined
-    // * boolean
-    // * number
-    // * string
-    // * symbol
-    // * function
     if (item === null || typeof item !== 'object') {
       return item;
     }
 
-    // Handle:
-    // * Date
     if (item instanceof Date) {
       return new Date(item.valueOf());
     }
 
-    // Handle:
-    // * Array
     if (item instanceof Array) {
       const copy: any = [];
 
@@ -97,8 +89,6 @@ export function cloneDeep(obj: Record<string, unknown | any>): Record<string, un
       return copy;
     }
 
-    // Handle:
-    // * Set
     if (item instanceof Set) {
       const copy = new Set();
 
@@ -107,8 +97,6 @@ export function cloneDeep(obj: Record<string, unknown | any>): Record<string, un
       return copy;
     }
 
-    // Handle:
-    // * Map
     if (item instanceof Map) {
       const copy = new Map();
 
@@ -117,17 +105,11 @@ export function cloneDeep(obj: Record<string, unknown | any>): Record<string, un
       return copy;
     }
 
-    // Handle:
-    // * Object
     if (item instanceof Object) {
       const copy: any = {};
 
-      // Handle:
-      // * Object.symbol
       Object.getOwnPropertySymbols(item).forEach((s) => { copy[s] = _cloneDeep(item[s]); });
 
-      // Handle:
-      // * Object.name (other)
       Object.keys(item).forEach((k) => { copy[k] = _cloneDeep(item[k]); });
 
       return copy;

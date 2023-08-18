@@ -32,7 +32,6 @@ class ProfileAPIClass {
     return this.http.put({
       url: profileApi.changePassword,
       options: {
-        // @ts-ignore
         data,
         ...headersJson,
       },

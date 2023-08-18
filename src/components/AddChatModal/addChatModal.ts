@@ -25,7 +25,7 @@ const addChatInputs = [
 
 class ChatModal extends Block {
   constructor(props: ChatModalProps) {
-    super('div', {...props}, 'chat-modal');
+    super({...props});
   }
 
   init() {
@@ -88,6 +88,7 @@ class ChatModal extends Block {
       buttons,
       controller: ChatController.addChat.bind(ChatController),
       formClassName: 'add-chat-modal',
+      clearAfterSubmit: true,
     });
   }
 

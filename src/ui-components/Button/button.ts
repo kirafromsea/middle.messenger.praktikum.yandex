@@ -14,7 +14,7 @@ export type ButtonProps = {
 
 class Button extends Block {
   constructor(props: ButtonProps) {
-    super('button', {
+    super({
       type: 'button',
       uiType: 'primary',
       disabled: false,

@@ -1,5 +1,6 @@
 import Handlebars from 'handlebars';
 import {v4} from 'uuid';
+import {isEqual} from '../utils/object';
 import EventBus from './EventBus';
 
 class Block<T extends Record<string, any> = any> {
@@ -18,22 +19,11 @@ class Block<T extends Record<string, any> = any> {
 
   public id: string | null = null; // уникальный id для каждого блока на странице
 
-  // eslint-disable-next-line no-use-before-define
   public children: Record<string, Block<T> | Block<T>[]>; // потомки в элементе
-
-  public tagName: string;
-
-  public componentName: string;
 
   public events?: { [key: string]: HTMLElement }; // события
 
-  /** JSDoc
-     * @param {string} tagName
-     * @param {Object} initProps
-     *
-     * @returns {void}
-     */
-  constructor(tagName: string, initProps: T, componentName?: string) {
+  constructor(initProps: T) {
     // конструктор - здесь собираем всё необходимое для дайльнейшей работы
     const eventBus = new EventBus();
 
@@ -42,8 +32,6 @@ class Block<T extends Record<string, any> = any> {
     this.id = v4();
     this.children = children;
     this.props = this._makeProxyProps({...props, id: this.id});
-    this.tagName = tagName;
-    this.componentName = componentName || tagName;
 
     this.eventBus = () => eventBus;
 
@@ -55,7 +43,7 @@ class Block<T extends Record<string, any> = any> {
         props: T
         children: Record<string, Block | Block[]>
     } {
-    const props: Record<string, unknown> = {};
+    const propsOther: Record<string, unknown> = {};
     const children: Record<string, Block | Block[]> = {};
 
     Object.entries(initProps).forEach(([key, value]) => {
@@ -64,11 +52,11 @@ class Block<T extends Record<string, any> = any> {
       } else if (value instanceof Block) {
         children[key as string] = value;
       } else {
-        props[key] = value;
+        propsOther[key] = value;
       }
     });
 
-    return {props: props as T, children};
+    return {props: propsOther as T, children};
   }
 
   private _init() {
@@ -90,11 +78,10 @@ class Block<T extends Record<string, any> = any> {
     this.componentDidMount();
   }
 
-  private _componentDidUpdate() {
-    // то чот происходит при обновлении пропсов
-    const response = this.componentDidUpdate();
-    if (!response) return;
-    this._render();
+  private _componentDidUpdate(oldProps: any, newProps: any) {
+    if (this.componentDidUpdate(oldProps, newProps)) {
+      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    }
   }
 
   private _makeProxyProps(props: T) {
@@ -130,7 +117,7 @@ class Block<T extends Record<string, any> = any> {
       return;
     }
 
-    Object.keys(events).forEach((event) => {
+    Object.keys(events).forEach((event: string) => {
       this._element?.addEventListener(event, events[event]);
     });
   }
@@ -148,7 +135,7 @@ class Block<T extends Record<string, any> = any> {
     });
   }
 
-  public compile({template, context = {}}: {template: string; context: {[k: string]: unknown}}): DocumentFragment {
+  public compile({template, context = {}}: {template: string; context: any}): DocumentFragment {
     Object.entries(this.children).forEach(([name, component]) => {
       if (Array.isArray(component)) {
         context[name] = component.map((child) => `<div data-id="${child.id}"></div>`);
@@ -207,7 +194,9 @@ class Block<T extends Record<string, any> = any> {
 
   public componentDidMount() {} // может быть переопределено пользователем
 
-  public componentDidUpdate() { return true; }
+  componentDidUpdate(oldProps: any, newProps: any) {
+    return !isEqual(oldProps, newProps);
+  }
 
   public dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
@@ -227,8 +216,10 @@ class Block<T extends Record<string, any> = any> {
       return;
     }
 
+    const prevProps = {...this.props};
     Object.assign(this.props, nextProps);
-    this._componentDidUpdate();
+
+    this._componentDidUpdate(prevProps, nextProps);
   }
 
   public getProps(key: string) {

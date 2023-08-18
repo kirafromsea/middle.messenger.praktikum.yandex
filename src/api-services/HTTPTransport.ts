@@ -44,7 +44,18 @@ class HTTPTransport {
     this.baseUrl = baseUrl;
   }
 
-  get = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.GET}, timeout: options?.timeout});
+  /*
+  const {data} = options;
+    const reqUrl = `${this.baseUrl}${url}${queryStringify(data)}`;
+    console.log('=reqUrl', reqUrl);
+    return
+   */
+  get = ({url, options = {}}: QueryProps) => {
+    const {data = {}} = options;
+    const reqUrl = `${this.baseUrl}${url}${queryStringify(data)}`;
+    console.log('=reqUrl', reqUrl);
+    return this.request({url: reqUrl, options: {...options, method: METHODS.GET}, timeout: options?.timeout});
+  };
 
   put = ({url, options = {}}: QueryProps) => this.request({url: `${this.baseUrl}${url}`, options: {...options, method: METHODS.PUT}, timeout: options?.timeout});
 
@@ -57,11 +68,11 @@ class HTTPTransport {
 
     return new Promise((resolve, reject) => {
       let reqUrl = url;
-
+/*
       if (method === METHODS.GET && !!data) {
         reqUrl = `${url}${queryStringify(data)}`;
       }
-
+*/
       const xhr = new XMLHttpRequest();
 
       xhr.open(method, reqUrl);

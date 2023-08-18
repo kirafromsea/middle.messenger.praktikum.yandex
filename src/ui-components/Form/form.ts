@@ -9,13 +9,14 @@ type FormProps = {
     buttons: Block[];
     formClassName: string;
     controller?: Function;
+    clearAfterSubmit?: boolean;
 };
 
 class Form extends Block {
   controller: null | Function;
 
   constructor({...props}: FormProps) {
-    super('form', {title: '', isValid: true, ...props});
+    super({title: '', isValid: true, ...props});
     if (props.controller) this.controller = props.controller;
   }
 
@@ -48,6 +49,7 @@ class Form extends Block {
   }
 
   validate() {
+    console.log('=form validate');
     const controls = this.children.controls as Input[];
     const controlsData = controls.map((item) => item.validate());
 
@@ -84,8 +86,16 @@ class Form extends Block {
     console.log('Data form is valid. Go to next page');
     if (this.controller) {
       await this.controller(dataForm);
+      this.clearForm();
     }
     return true;
+  }
+
+  clearForm() {
+    if (this.props.clearAfterSubmit) {
+      const controls = this.children.controls as Input[];
+      controls.forEach((item) => item.clear());
+    }
   }
 
   render() {

@@ -11,6 +11,7 @@ export const chatApi = {
   newMessages: '/new/:id', // get - получить количество новых сообщений в указанном чате;
   chatAvatar: '/avatar', // put - загрузить аватар чата (через multipart/form-data);
   changeUsers: '/users', // put - добавить пользователя в чат; delete - удалить пользователей из чата.
+  token: '/token/:id', // put - получение токена для открытия сокетов
 };
 
 export const profileApi = {

@@ -51,7 +51,7 @@ const buttonsData: ButtonProps[] = [
 
 class LoginPage extends Block {
   constructor() {
-    super('div', {});
+    super({});
   }
 
   init() {

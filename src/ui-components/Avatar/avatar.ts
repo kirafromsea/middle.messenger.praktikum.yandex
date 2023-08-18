@@ -9,14 +9,10 @@ type AvatarProps = {
 
 class Avatar extends Block {
   constructor(props: AvatarProps) {
-    super(
-      'div',
-      {
-        ...props,
-        url: props.url || DEFAULT_AVATAR,
-      },
-      'avatar-component',
-    );
+    super({
+      ...props,
+      url: props.url || DEFAULT_AVATAR,
+    });
   }
 
   render() {

@@ -17,7 +17,7 @@ type ChatModalProps = {
 
 class SettingsChatModal extends Block {
   constructor(props: ChatModalProps) {
-    super('div', {...props}, 'settings-chat-modal');
+    super({...props});
   }
 
   async init() {

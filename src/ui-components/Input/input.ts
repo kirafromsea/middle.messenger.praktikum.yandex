@@ -16,7 +16,7 @@ export interface InputProps {
 
 class Input extends Block {
   constructor(props: InputProps) {
-    super('input', {
+    super({
       regExpValidate: null,
       events: props.events || {},
       required: false,
@@ -67,6 +67,11 @@ class Input extends Block {
   public getValue() {
     const field = this.element as HTMLElement;
     return (field.getElementsByTagName('input'))[0].value;
+  }
+
+  public clear() {
+    const field = this.element as HTMLElement;
+    (field.getElementsByTagName('input'))[0].value = '';
   }
 
   render() {

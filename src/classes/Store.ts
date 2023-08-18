@@ -1,17 +1,18 @@
 import {set} from '../utils/object';
 import EventBus from './EventBus';
-import {ChatsType, ChatItemType} from '../types/chats';
+import {ChatsType, ChatItemType, ChatMessageType} from '../types/chats';
 
 const storeEventsUpdated = 'updated';
 
 export type StoreState = {
-    auth: boolean,
-    user: null | Record<string, string | number>,
-    isLoading: false,
-    getPage: string,
-    chats: ChatsType,
-    error: null | {code: number; response: unknown},
-    activeChat: ChatItemType | null
+    auth: boolean;
+    user: null | Record<string, string | number>;
+    isLoading: boolean;
+    getPage: string;
+    chats: ChatsType;
+    error: null | {code: number; response: unknown};
+    activeChat: ChatItemType | null;
+    messages: Record<number, ChatMessageType[]>;
 };
 
 const initialStoreState: StoreState = {
@@ -22,6 +23,7 @@ const initialStoreState: StoreState = {
   chats: [],
   error: null,
   activeChat: null,
+  messages: {},
 };
 
 class Store extends EventBus {
@@ -37,6 +39,7 @@ class Store extends EventBus {
     }
     try {
       set(this.state, path, value);
+      console.log('=after sets state', this.state);
       this.emit(storeEventsUpdated);
     } catch (e) {
       console.log(e);
@@ -52,4 +55,5 @@ class Store extends EventBus {
     }
   }
 }
+
 export default new Store();

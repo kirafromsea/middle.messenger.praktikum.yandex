@@ -7,14 +7,12 @@ class UsersController {
   public async searchUser(login: string) {
     try {
       const {status, response} = await UsersAPI.postSearch(login);
-      console.log('=search user', status, response);
       if (status === 200) {
         return JSON.parse(response);
       } if (status >= 400) {
         this.store.set('error', {code: status, response});
       }
     } catch (e) {
-      console.log(e);
       this.store.set('error', {code: 500});
     }
 
