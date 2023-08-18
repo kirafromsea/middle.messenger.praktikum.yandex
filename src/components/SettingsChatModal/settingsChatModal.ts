@@ -3,7 +3,7 @@ import ChatController from '../../controllers/ChatController';
 import Button from '../../ui-components/Button/button';
 import Input from '../../ui-components/Input/input';
 import Form from '../../ui-components/Form/form';
-import {ChatItemType} from '../../types/chats';
+import {ChatItemType, ChatUserType} from '../../types/chats';
 import Avatar from '../../ui-components/Avatar/avatar';
 import {DEFAULT_AVATAR} from '../../utils/constants';
 import UsersList from '../UsersList/usersList';
@@ -22,8 +22,7 @@ class SettingsChatModal extends Block {
 
   async init() {
     /** Close button */
-    const users = await ChatController.getUsers(this.props.activeChat.id,);
-    console.log('=init', users);
+    const users = await ChatController.getUsers(this.props.activeChat.id);
     const onClose = this.getProps('onClose');
     this.children.closeButton = new Button({
       title: 'X',
@@ -70,8 +69,8 @@ class SettingsChatModal extends Block {
             this.usersList(users);
             this.setProps({users});
           }
-        }
-      }
+        },
+      },
     });
 
     const addUserControl = new Input({
@@ -105,13 +104,13 @@ class SettingsChatModal extends Block {
     this.usersList(users);
 
     this.setProps({
-      users
+      users,
     });
   }
 
-  usersList(users) {
+  usersList(users: ChatUserType[]) {
     this.children.usersList = new UsersList({
-      users
+      users,
     });
   }
 

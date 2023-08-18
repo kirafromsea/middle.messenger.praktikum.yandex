@@ -192,7 +192,7 @@ class ChatPage extends Block {
   chatSettingsModal(activeChat: ChatItemType) {
     this.children.settingsChatModal = new SettingsChatModal({
       activeChat,
-      onClose: () => {this.toggleModal('settingsChatModal')},
+      onClose: () => { this.toggleModal('settingsChatModal'); },
       afterChange: async () => {
         const newChats = await ChatController.getChats();
         this.chatsList(newChats);

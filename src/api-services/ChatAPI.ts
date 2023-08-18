@@ -66,8 +66,8 @@ class ChatAPIClass {
       url: chatApi.changeUsers,
       options: {
         data,
-        ...headersJson
-      }
+        ...headersJson,
+      },
     });
   }
 }

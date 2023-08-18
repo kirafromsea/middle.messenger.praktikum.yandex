@@ -144,19 +144,20 @@ class ChatController {
       if (searchResult[0] && chatId) {
         const {status, response} = await ChatAPI.putUsers({
           users: [searchResult[0].id],
-          chatId: chatId
+          chatId,
         });
-        console.log('=addUser result response', response);
+
         if (status === 200) {
           return JSON.parse(response);
         }
         this.store.set('error', {code: status, response});
       }
-
     } catch (e) {
       console.log(e);
       this.store.set('error', {code: 500});
     }
+
+    return null;
   }
 
   public async deleteUserInChat(id: number) {
@@ -165,7 +166,7 @@ class ChatController {
       if (chatId) {
         const {status, response} = await ChatAPI.deleteUser({
           users: [id],
-          chatId: chatId
+          chatId,
         });
         if (status === 200) {
           return true;
