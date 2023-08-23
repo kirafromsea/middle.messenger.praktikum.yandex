@@ -26,9 +26,11 @@ const chatTmpl = `
                   {{{activeChatAvatar}}}
                 </div>
                   <div class="chat-massages">
-                    {{#each messageList}}  
-                      {{{this}}}
-                    {{/each}}
+                    <div class="chat-massages__content">
+                      {{#each messageList}}  
+                        {{{this}}}
+                      {{/each}}
+                    </div>
                   </div>
                   {{{messageForm}}}
               {{/if}}
