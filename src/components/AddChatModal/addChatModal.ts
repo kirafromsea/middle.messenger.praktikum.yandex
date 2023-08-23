@@ -10,6 +10,7 @@ type ChatModalProps = {
   onClose?: () => void,
   onSubmit?: () => void;
   activeChat?: ChatItemType;
+  process?: boolean;
 }
 
 const addChatInputs = [
@@ -25,7 +26,7 @@ const addChatInputs = [
 
 class ChatModal extends Block {
   constructor(props: ChatModalProps) {
-    super({...props});
+    super({...props, process: false});
   }
 
   init() {

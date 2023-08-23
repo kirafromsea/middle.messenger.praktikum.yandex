@@ -125,6 +125,14 @@
   }
 }
 
+.chat-loading{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
 .chat-user_avatar, .message-item_avatar {
   width: 42px;
   height: 42px;

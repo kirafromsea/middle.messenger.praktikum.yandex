@@ -44,16 +44,9 @@ class HTTPTransport {
     this.baseUrl = baseUrl;
   }
 
-  /*
-  const {data} = options;
-    const reqUrl = `${this.baseUrl}${url}${queryStringify(data)}`;
-    console.log('=reqUrl', reqUrl);
-    return
-   */
   get = ({url, options = {}}: QueryProps) => {
     const {data = {}} = options;
     const reqUrl = `${this.baseUrl}${url}${queryStringify(data)}`;
-    console.log('=reqUrl', reqUrl);
     return this.request({url: reqUrl, options: {...options, method: METHODS.GET}, timeout: options?.timeout});
   };
 
@@ -67,15 +60,9 @@ class HTTPTransport {
     const {headers = {}, method = METHODS.GET, data} = options;
 
     return new Promise((resolve, reject) => {
-      let reqUrl = url;
-/*
-      if (method === METHODS.GET && !!data) {
-        reqUrl = `${url}${queryStringify(data)}`;
-      }
-*/
       const xhr = new XMLHttpRequest();
 
-      xhr.open(method, reqUrl);
+      xhr.open(method, url);
       xhr.withCredentials = true;
 
       Object.keys(headers).forEach((key) => {

@@ -44,7 +44,7 @@ class ChatController {
     const chats: ChatItemType[] = [];
     try {
       this.store.set('error', null);
-      this.store.set('isLoading', true);
+      this.store.set('methodLoading', true);
       const {status, response} = await ChatAPI.chats();
       if (status === 200) {
         /**
@@ -69,11 +69,11 @@ class ChatController {
         }
 
         this.store.set('chats', chats);
-        this.store.set('isLoading', false);
+        this.store.set('methodLoading', false);
       } else {
         this.store.set('chats', null);
         this.store.set('error', {code: status, response});
-        this.store.set('isLoading', true);
+        this.store.set('methodLoading', true);
       }
     } catch (e) {
       console.log(e);

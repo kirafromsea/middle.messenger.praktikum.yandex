@@ -7,7 +7,8 @@ const storeEventsUpdated = 'updated';
 export type StoreState = {
     auth: boolean;
     user: null | Record<string, string | number>;
-    isLoading: boolean;
+    pageLoading: boolean;
+    methodLoading: boolean;
     getPage: string;
     chats: ChatsType;
     error: null | {code: number; response: unknown};
@@ -18,7 +19,8 @@ export type StoreState = {
 const initialStoreState: StoreState = {
   auth: false,
   user: null,
-  isLoading: false,
+  pageLoading: false,
+  methodLoading: false,
   getPage: '/',
   chats: [],
   error: null,
@@ -39,7 +41,6 @@ class Store extends EventBus {
     }
     try {
       set(this.state, path, value);
-      console.log('=after sets state', this.state);
       this.emit(storeEventsUpdated);
     } catch (e) {
       console.log(e);

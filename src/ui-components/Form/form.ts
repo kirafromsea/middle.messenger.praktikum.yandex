@@ -10,13 +10,16 @@ type FormProps = {
     formClassName: string;
     controller?: Function;
     clearAfterSubmit?: boolean;
+    isProcessing?: boolean;
 };
 
 class Form extends Block {
   controller: null | Function;
 
   constructor({...props}: FormProps) {
-    super({title: '', isValid: true, ...props});
+    super({
+      title: '', isValid: true, ...props, isProcessing: false,
+    });
     if (props.controller) this.controller = props.controller;
   }
 
@@ -49,7 +52,6 @@ class Form extends Block {
   }
 
   validate() {
-    console.log('=form validate');
     const controls = this.children.controls as Input[];
     const controlsData = controls.map((item) => item.validate());
 
@@ -72,6 +74,7 @@ class Form extends Block {
   }
 
   async submit() {
+    this.setProps({isProcessing: true});
     this.validate();
     const dataForm = this.getProps('data');
 
@@ -88,6 +91,8 @@ class Form extends Block {
       await this.controller(dataForm);
       this.clearForm();
     }
+
+    this.setProps({isProcessing: false});
     return true;
   }
 

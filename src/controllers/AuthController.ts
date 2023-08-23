@@ -28,7 +28,6 @@ class AuthController {
         this.store.set('error', {code: status, response});
       }
     } catch (error) {
-      console.log('=api login catch', error);
       this.store.set('error', {code: 500});
     }
   }
@@ -47,7 +46,6 @@ class AuthController {
 
       this.store.set('isLoading', false);
     } catch (error) {
-      console.log('=error', error);
       this.store.set('error', {code: 500});
     }
   }

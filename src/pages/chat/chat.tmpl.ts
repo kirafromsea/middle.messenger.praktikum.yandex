@@ -1,15 +1,12 @@
 const chatTmpl = `
   <div class="chat-page">
-   {{#if isLoading}}
-      <div class="page-loader" />
-   {{else}}
       <div class="chat-left">
           <div class="chat-list">
             <ul>
               {{#each chatsList}}
                   {{{this}}}
-              {{/each}}
-            </ul>
+               {{/each}}
+            </ul>           
           </div>
           <div class="chat-bottom">
               {{{profileButton}}}
@@ -18,6 +15,11 @@ const chatTmpl = `
       </div>
       <div class="chat-right">
           <div class="chat-right">
+          {{#if pageLoading}}
+              <div class="chat-loading">
+                    <div class="page-loader" />
+              </div>
+           {{else}}
               {{#if activeChat}}
                 <div class="chat-header">
                   {{{settingsChatButton}}}
@@ -30,11 +32,11 @@ const chatTmpl = `
                   </div>
                   {{{messageForm}}}
               {{/if}}
+           {{/if}}
           </div>
       </div>
       {{{addChatModal}}}
       {{{settingsChatModal}}}
-    {{/if}}
   </div>
 `;
 

@@ -20,9 +20,10 @@ type ModalsSettingsNameProps = 'addChatModal' | 'settingsChatModal';
 
 type ChatPageProps = {
   messages?: ChatMessageType[];
-  isLoading?: boolean;
+  pageLoading?: boolean;
   user?: null | Record<string, string | number>;
   chats?: ChatsType;
+  methodLoading?: boolean;
   error?: null | {code: number; response: unknown};
   activeChat?: ChatItemType | null;
 }
@@ -32,6 +33,7 @@ class ChatPage extends Block {
     super({
       ...initProps,
     });
+    Store.set('pageLoading', true);
   }
 
   async init() {
@@ -83,8 +85,7 @@ class ChatPage extends Block {
     this.children.addChatModal = new AddChatModal({
       onClose: () => { this.toggleModal('addChatModal'); },
       onSubmit: async () => {
-        const newChats: ChatsType = await ChatController.getChats();
-        this.chatsList(newChats, this.props.activeChat?.id);
+        await ChatController.getChats();
       },
     });
 
@@ -99,9 +100,13 @@ class ChatPage extends Block {
       },
     });
     this.chatsList(this.props.chats, this.props.activeChat?.id);
+    Store.set('pageLoading', false);
   }
 
   componentDidUpdate(oldProps?: ChatPageProps, newProps?: ChatPageProps) {
+    if (newProps?.chats && (oldProps?.chats !== newProps.chats)) {
+      this.chatsList(newProps.chats, newProps.activeChat?.id);
+    }
     if (oldProps?.messages !== newProps?.messages && this.props.activeChat) {
       this.messageList(this.props.activeChat);
     }
@@ -189,11 +194,14 @@ const withMessages = withStore((state: StoreState) => {
       messages,
       chats,
       activeChat: state.activeChat,
-      isLoading: state.isLoading,
+      pageLoading: state.pageLoading,
+      methodLoading: state.methodLoading,
     };
   } catch {
-    return {messages: [], chats: [], isLoading: false};
+    return {
+      messages: [], chats: [], pageLoading: false, methodLoading: false,
+    };
   }
 });
-console.log('=whithStore', withMessages);
+
 export default withMessages(ChatPage);
