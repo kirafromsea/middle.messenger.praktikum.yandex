@@ -1,23 +1,26 @@
-import chatInfo from '../../../public/chats';
-import {ChatsInfoType} from '../../types/chats';
 import Block from '../../classes/Block';
+import Store from '../../classes/Store';
+import AuthController from '../../controllers/AuthController';
+import {Paths} from '../../utils/constants';
 import Avatar from '../../ui-components/Avatar/avatar';
-import profileTmpl from './profile.tmpl';
 import Input from '../../ui-components/Input/input';
 import Button from '../../ui-components/Button/button';
 import Form from '../../ui-components/Form/form';
 import {controlsPassword, controlsProfile} from './controlsInputSettings';
 import {passwordFormButtons, profileFormButtons} from './buttonsSettings';
+import profileTmpl from './profile.tmpl';
+import ProfileController from '../../controllers/ProfileController';
 
 class ProfilePage extends Block {
   constructor() {
-    super('div', {});
+    AuthController.getUser();
+    const {user, auth} = Store.getState();
+    super({profile: auth ? user : null});
   }
 
   init() {
-    const {profile} = chatInfo as ChatsInfoType;
-    if (!profile || !profile.login) {
-      window.location.href = '/error/401';
+    const {profile} = this.props;
+    if (!profile) {
       return;
     }
 
@@ -31,6 +34,7 @@ class ProfilePage extends Block {
     this.children.profileForm = new Form({
       controls: profileFormInput,
       buttons: buttonsProfile,
+      controller: ProfileController.updateProfile.bind(ProfileController),
       formClassName: 'user-info',
     });
 
@@ -44,6 +48,7 @@ class ProfilePage extends Block {
     this.children.passwordForm = new Form({
       controls: passwordFormInputs,
       buttons: buttonsPassword,
+      controller: ProfileController.updatePassword.bind(ProfileController),
       formClassName: 'user-password',
     });
 
@@ -53,12 +58,56 @@ class ProfilePage extends Block {
       type: 'button',
       events: {
         onClick: () => {
-          window.location.href = '/chat';
+          window.location.href = Paths.Chat;
         },
       },
     });
 
-    this.children.avatar = new Avatar({url: profile.avatar || ''});
+    this.children.avatar = this.setAvatar();
+
+    this.children.uploadButton = new Input({
+      name: 'avatar',
+      type: 'file',
+      placeholder: 'Update avatar',
+      required: false,
+      value: this.getProps('url'),
+      events: {
+        onChange: (event) => {
+          if (event) {
+            this.updateAvatar(event);
+          }
+        },
+      },
+    });
+
+    this.children.logoutButton = new Button({
+      title: 'Logout',
+      uiType: 'secondary',
+      type: 'button',
+      events: {
+        onClick: AuthController.logout.bind(AuthController),
+      },
+    });
+  }
+
+  async updateAvatar(e: Event) {
+    const data = new FormData();
+    const elem = e.target as HTMLInputElement;
+    if (elem?.files) {
+      data.set('avatar', elem?.files[0]);
+    }
+    const result = await ProfileController.updateAvatar(data);
+    if (result) {
+      this.setProps({profile: result});
+      (this.children.avatar as Block).setProps({url: result?.avatar});
+    }
+  }
+
+  setAvatar() {
+    return new Avatar({
+      url: this.getProps('profile').avatar || null,
+      controller: ProfileController.updateAvatar.bind(ProfileController),
+    });
   }
 
   render() {

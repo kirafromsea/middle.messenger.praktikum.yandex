@@ -16,9 +16,9 @@ export interface InputProps {
 
 class Input extends Block {
   constructor(props: InputProps) {
-    super('input', {
+    super({
       regExpValidate: null,
-      events: {},
+      events: props.events || {},
       required: false,
       errorMessage: null,
       ...props,
@@ -26,12 +26,17 @@ class Input extends Block {
   }
 
   init() {
+    const onChange = this.getProps('events')?.onChange;
+
     this.setProps({
       events: {
-        change: (e: Event) => {
-          const field = document.querySelector(`[name=${(e.target as HTMLInputElement).name}]`) as HTMLInputElement;
+        change: (event: Event) => {
+          const field = document.querySelector(`[name=${(event.target as HTMLInputElement).name}]`) as HTMLInputElement;
           this.setValue(field.value);
           this.validate();
+          if (onChange) {
+            onChange(event);
+          }
         },
       },
     });
@@ -62,6 +67,11 @@ class Input extends Block {
   public getValue() {
     const field = this.element as HTMLElement;
     return (field.getElementsByTagName('input'))[0].value;
+  }
+
+  public clear() {
+    const field = this.element as HTMLElement;
+    (field.getElementsByTagName('input'))[0].value = '';
   }
 
   render() {

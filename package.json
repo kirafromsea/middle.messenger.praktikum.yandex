@@ -13,7 +13,7 @@
     "start": "vite build; vite preview --port 3000",
     "start:server": "node ./server/server.js ",
     "typescript": "tsc --noEmit",
-    "lint": "eslint . --ext .ts --fix",
+    "lint:fix": "eslint . --ext .ts --fix",
     "stylelint": "stylelint src/scss/*.* --fix"
   },
   "devDependencies": {
@@ -28,8 +28,9 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
-    "handlebars": "^4.7.7",
+    "eslint-plugin-prettier": "^5.0.0",
     "express": "^4.18.2",
+    "handlebars": "^4.7.7",
     "sass": "^1.63.4",
     "uuid": "^9.0.0"
   }

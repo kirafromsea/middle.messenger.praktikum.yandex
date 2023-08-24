@@ -8,11 +8,19 @@ type FormProps = {
     controls: Input[];
     buttons: Block[];
     formClassName: string;
+    controller?: Function;
+    clearAfterSubmit?: boolean;
+    isProcessing?: boolean;
 };
 
 class Form extends Block {
+  controller: null | Function;
+
   constructor({...props}: FormProps) {
-    super('form', {title: '', isValid: true, ...props});
+    super({
+      title: '', isValid: true, ...props, isProcessing: false,
+    });
+    if (props.controller) this.controller = props.controller;
   }
 
   init() {
@@ -27,14 +35,15 @@ class Form extends Block {
     const buttons = this.children.buttons as Block[];
     buttons.forEach((button) => {
       if (button.getProps('type') === 'submit') {
-        const oldOnClick = button.getProps('events').click;
+        const oldOnClick = button.getProps('events')?.click;
         button.setProps({
           events: {
-            click: () => {
-              const result: boolean = this.submit();
-              if (result && oldOnClick) {
-                oldOnClick();
-              }
+            click: async () => {
+              this.submit().then(() => {
+                if (oldOnClick) {
+                  oldOnClick();
+                }
+              });
             },
           },
         });
@@ -64,7 +73,8 @@ class Form extends Block {
     }
   }
 
-  submit(): boolean {
+  async submit() {
+    this.setProps({isProcessing: true});
     this.validate();
     const dataForm = this.getProps('data');
 
@@ -77,7 +87,20 @@ class Form extends Block {
     }
 
     console.log('Data form is valid. Go to next page');
+    if (this.controller) {
+      await this.controller(dataForm);
+      this.clearForm();
+    }
+
+    this.setProps({isProcessing: false});
     return true;
+  }
+
+  clearForm() {
+    if (this.props.clearAfterSubmit) {
+      const controls = this.children.controls as Input[];
+      controls.forEach((item) => item.clear());
+    }
   }
 
   render() {

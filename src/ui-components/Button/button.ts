@@ -4,7 +4,7 @@ import buttonTmpl from './button.tmpl';
 export type ButtonProps = {
   title: string;
   onClick?: () => void;
-  uiType?: 'primary' | 'secondary' | 'third' | 'ghost';
+  uiType?: 'primary' | 'secondary' | 'third' | 'ghost' | 'danger';
   type?: 'button' | 'submit';
   disabled?: boolean;
   events?: {
@@ -14,7 +14,7 @@ export type ButtonProps = {
 
 class Button extends Block {
   constructor(props: ButtonProps) {
-    super('button', {
+    super({
       type: 'button',
       uiType: 'primary',
       disabled: false,
@@ -38,11 +38,3 @@ class Button extends Block {
 }
 
 export default Button;
-
-/*
-{
-    title, onClick, uiType = 'primary', type = 'button',
-}: ButtonProps) => Handlebars.compile(buttonTmpl)({
-    title, onClick, uiType, type,
-}
- */

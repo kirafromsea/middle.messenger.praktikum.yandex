@@ -1,12 +1,16 @@
 import Block from '../../classes/Block';
+import Store from '../../classes/Store';
 import errorTmpl from './error.tmpl';
 import errors, {defaultErrorMessage} from './errorsList';
-import {ErrorProps} from './types';
+
+const DEFAULT_ERROR_CODE = 404;
 
 class ErrorPage extends Block {
-  constructor(props: ErrorProps) {
+  constructor() {
+    const {error} = Store.getState();
+    const props = {errorCode: error?.code || DEFAULT_ERROR_CODE};
     const errorIndex = `error_${props.errorCode}`;
-    super('div', {
+    super({
       errorNumber: props.errorCode,
       errorMessage: (errorIndex.trim() !== '' && errors[errorIndex]) ? errors[errorIndex] : defaultErrorMessage,
     });

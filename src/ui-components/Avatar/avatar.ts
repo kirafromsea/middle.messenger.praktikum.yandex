@@ -1,13 +1,17 @@
 import Block from '../../classes/Block';
+import {DEFAULT_AVATAR} from '../../utils/constants';
 import avatarTmpl from './avatar.tmpl';
 
 type AvatarProps = {
-    url: string;
+    url: string | null;
+    controller?: Function;
 }
+
 class Avatar extends Block {
   constructor(props: AvatarProps) {
-    super('div', {
+    super({
       ...props,
+      url: props.url || DEFAULT_AVATAR,
     });
   }
 

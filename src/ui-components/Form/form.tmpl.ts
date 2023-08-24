@@ -3,12 +3,16 @@ const formTmpl = `
         {{#if title}}
             <h2 class="{{formClassName}}__title">{{title}}</h2>
         {{/if}}
-        {{#each controls}}
-            {{{this}}}
-        {{/each}}
-        {{#each buttons}}
-            {{{this}}}
-        {{/each}}
+        <div class="form-controls">
+            {{#each controls}}
+                {{{this}}}
+            {{/each}}
+        </div>
+        <div class="form-buttons">
+            {{#each buttons}}
+                {{{this}}}
+            {{/each}}
+        </div>
     </form>
 `;
 
