@@ -1,5 +1,5 @@
-import Block from './Block';
-import Store from './Store';
+import Block from '../Block';
+import Store from '../Store';
 
 export function render(query: string, block: Block): void {
   const root = document.querySelector(query);
@@ -61,6 +61,10 @@ class Route {
       root.append(this._block.getContent() || '');
     }
     Store.set('', '');
+  }
+
+  getPathname() {
+    return this._pathname;
   }
 }
 

@@ -19,5 +19,5 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": false
   },
-  "include": ["src"]
+  "include": ["src/**/*", "test/index.spec.ts"]
 }
