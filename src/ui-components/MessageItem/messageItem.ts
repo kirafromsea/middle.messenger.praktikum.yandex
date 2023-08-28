@@ -1,4 +1,4 @@
-import Block from '../../classes/Block';
+import Block from '../../classes/Block/Block';
 import {MESSAGE_TYPE_SELF, MESSAGE_TYPE_COMPANION, DEFAULT_AVATAR} from '../../utils/constants';
 import messageItemTmpl from './messageItem.tmpl';
 

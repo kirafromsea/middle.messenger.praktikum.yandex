@@ -1,4 +1,4 @@
-import Block from '../../classes/Block';
+import Block from '../../classes/Block/Block';
 import AuthController from '../../controllers/AuthController';
 import Form from '../../ui-components/Form/form';
 import Input from '../../ui-components/Input/input';

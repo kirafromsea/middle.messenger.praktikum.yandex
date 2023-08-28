@@ -1,4 +1,4 @@
-import Block from '../Block';
+import Block from '../Block/Block';
 import Store from '../Store';
 
 export function render(query: string, block: Block): void {

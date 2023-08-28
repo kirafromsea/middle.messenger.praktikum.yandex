@@ -30,6 +30,7 @@
     "object-curly-spacing": ["error", "never"],
     "no-case-declarations": "error",
     "no-await-in-loop": "off",
+    "max-classes-per-file": "off",
     "no-multiple-empty-lines": [
       "error",
       {

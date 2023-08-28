@@ -1,4 +1,4 @@
-import Block from '../../classes/Block';
+import Block from '../../classes/Block/Block';
 import Input from '../Input/input';
 import formTmpl from './form.tmpl';
 

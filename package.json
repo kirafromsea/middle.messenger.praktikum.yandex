@@ -15,11 +15,12 @@
     "typescript": "tsc --noEmit",
     "lint:fix": "eslint . --ext .ts --fix",
     "stylelint": "stylelint src/scss/*.* --fix",
-    "test": "./node_modules/.bin/mocha --require ts-node/register --require src/test.js"
+    "test": "./node_modules/.bin/mocha --require ts-node/register --require src/test.js",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint:fix && npm run stylelint && npm run typescript && npm tun test"
+      "pre-commit": "npm run lint:fix && npm run stylelint && npm run typescript && npm run test"
     }
   },
   "devDependencies": {
@@ -32,7 +33,7 @@
     "chai": "^4.3.8",
     "eslint": "^8.43.0",
     "eslint-config-airbnb": "^19.0.4",
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
     "mocha": "^10.2.0",
     "stylelint": "^15.10.1",
     "stylelint-config-standard-scss": "^10.0.0",

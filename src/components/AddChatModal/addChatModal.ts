@@ -1,4 +1,4 @@
-import Block from '../../classes/Block';
+import Block from '../../classes/Block/Block';
 import Form from '../../ui-components/Form/form';
 import Button, {ButtonProps} from '../../ui-components/Button/button';
 import Input from '../../ui-components/Input/input';

@@ -1,9 +1,9 @@
-import Block from './Block';
+import Block from '../Block/Block';
 import Route from './Route';
-import Store from './Store';
-import {root} from '../config';
+import Store from '../Store';
+import {root} from '../../config';
 
-import {Paths} from '../utils/constants';
+import {Paths} from '../../utils/constants';
 
 class Router {
   public routes: Route[];
@@ -99,6 +99,10 @@ class Router {
 
   getRoute(pathname: string): Route | undefined {
     return this.routes.find((route) => route.match(pathname));
+  }
+
+  getCurrentRoute() {
+    return this._currentRoute;
   }
 }
 

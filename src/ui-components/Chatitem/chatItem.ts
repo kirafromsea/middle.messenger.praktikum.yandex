@@ -1,4 +1,4 @@
-import Block from '../../classes/Block';
+import Block from '../../classes/Block/Block';
 import {ChatItemType} from '../../types/chats';
 import chatItemTmpl from './chatItem.tmpl';
 import {DEFAULT_AVATAR} from '../../utils/constants';

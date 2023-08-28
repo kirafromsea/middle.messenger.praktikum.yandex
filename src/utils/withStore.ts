@@ -1,5 +1,5 @@
 import Store, {StoreState} from '../classes/Store';
-import Block from '../classes/Block';
+import Block from '../classes/Block/Block';
 
 export enum StoreEvents {
   Updated = 'updated',
