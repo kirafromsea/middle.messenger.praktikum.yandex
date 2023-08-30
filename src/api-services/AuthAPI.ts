@@ -1,4 +1,4 @@
-import HTTPTransport from './HTTPTransport';
+import HTTPTransport from './HTTPTransport/HTTPTransport';
 import {baseUrl} from '../config';
 import {authApi} from './api-urls';
 import {SignupDataType, LoginDataType} from './types';
