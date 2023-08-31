@@ -165,8 +165,6 @@ class Block<T extends Record<string, any> = any> {
       }
     });
 
-    this._element = temp;
-
     return temp.content;
   }
 
@@ -228,7 +226,7 @@ class Block<T extends Record<string, any> = any> {
     return this.props[key];
   }
 
-  get element(): HTMLElement | null {
+  get element() {
     return this._element;
   }
 
