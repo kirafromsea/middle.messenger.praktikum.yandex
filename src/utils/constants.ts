@@ -9,4 +9,4 @@ export enum Paths {
 export const MESSAGE_TYPE_SELF: 'self' = 'self';
 export const MESSAGE_TYPE_COMPANION: 'companion' = 'companion';
 
-export const DEFAULT_AVATAR = '../../public/avatars/rigel.jpg';
+export const DEFAULT_AVATAR = 'avatars/rigel.jpg';
