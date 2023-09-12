@@ -1,4 +1,4 @@
-import Router from '../classes/Router';
+import Router from '../classes/Router/Router';
 import Store from '../classes/Store';
 import {Paths} from '../utils/constants';
 

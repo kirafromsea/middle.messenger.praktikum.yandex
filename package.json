@@ -14,14 +14,29 @@
     "start:server": "node ./server/server.js ",
     "typescript": "tsc --noEmit",
     "lint:fix": "eslint . --ext .ts --fix",
-    "stylelint": "stylelint src/scss/*.* --fix"
+    "stylelint": "stylelint src/scss/*.* --fix",
+    "test": "./node_modules/.bin/mocha --require ts-node/register --require src/test.js",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/jsdom": "^21.1.2",
+    "@types/mocha": "^10.0.1",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
+    "chai": "^4.3.8",
     "eslint": "^8.43.0",
     "eslint-config-airbnb": "^19.0.4",
+    "fake-xml-http-request": "^2.1.2",
+    "husky": "^8.0.0",
+    "lint-staged": "^14.0.1",
+    "mocha": "^10.2.0",
     "stylelint": "^15.10.1",
     "stylelint-config-standard-scss": "^10.0.0",
     "typescript": "^5.1.6",
@@ -31,7 +46,9 @@
     "eslint-plugin-prettier": "^5.0.0",
     "express": "^4.18.2",
     "handlebars": "^4.7.7",
+    "jsdom": "^22.1.0",
     "sass": "^1.63.4",
+    "ts-node": "^10.9.1",
     "uuid": "^9.0.0"
   }
 }

@@ -1,4 +1,4 @@
-import HTTPTransport from './HTTPTransport';
+import HTTPTransport from './HTTPTransport/HTTPTransport';
 import {baseUrl} from '../config';
 import {profileApi, headersJson} from './api-urls';
 import {UpdatePasswordProps, UpdateProfileProps} from '../types/profile';

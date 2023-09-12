@@ -1,4 +1,4 @@
-import Block from '../../classes/Block';
+import Block from '../../classes/Block/Block';
 import ChatController from '../../controllers/ChatController';
 import Button from '../../ui-components/Button/button';
 import Input from '../../ui-components/Input/input';

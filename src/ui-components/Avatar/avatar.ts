@@ -1,4 +1,4 @@
-import Block from '../../classes/Block';
+import Block from '../../classes/Block/Block';
 import {DEFAULT_AVATAR} from '../../utils/constants';
 import avatarTmpl from './avatar.tmpl';
 

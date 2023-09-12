@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars';
 import {v4} from 'uuid';
-import {isEqual} from '../utils/object';
-import EventBus from './EventBus';
+import {isEqual} from '../../utils/object';
+import EventBus from '../EventBus';
 
 class Block<T extends Record<string, any> = any> {
   static EVENTS = {

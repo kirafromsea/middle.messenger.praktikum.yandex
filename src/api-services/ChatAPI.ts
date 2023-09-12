@@ -1,4 +1,4 @@
-import HTTPTransport from './HTTPTransport';
+import HTTPTransport from './HTTPTransport/HTTPTransport';
 import {baseUrl} from '../config';
 import {chatApi, headersJson} from './api-urls';
 import {PutChatType, ChangeChatUsersType} from './types';

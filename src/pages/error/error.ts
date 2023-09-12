@@ -1,4 +1,4 @@
-import Block from '../../classes/Block';
+import Block from '../../classes/Block/Block';
 import Store from '../../classes/Store';
 import errorTmpl from './error.tmpl';
 import errors, {defaultErrorMessage} from './errorsList';

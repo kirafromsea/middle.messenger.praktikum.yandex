@@ -1,5 +1,5 @@
 // TODO разделить на компоненты, когда будет время после дедлайнов
-import Block from '../../classes/Block';
+import Block from '../../classes/Block/Block';
 import Store, {StoreState} from '../../classes/Store';
 import withStore from '../../utils/withStore';
 import {Paths} from '../../utils/constants';

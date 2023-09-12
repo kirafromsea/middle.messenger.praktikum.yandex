@@ -1,4 +1,4 @@
-import Router from './classes/Router';
+import Router from './classes/Router/Router';
 import {Paths} from './utils/constants';
 import LoginPage from './pages/login/login';
 import RegistrationPage from './pages/registration/registration';
